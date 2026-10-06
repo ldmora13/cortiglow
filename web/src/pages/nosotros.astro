@@ -1,0 +1,168 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const pageTitle = 'Nuestra Historia | Expertos en Cortinas e Iluminación';
+const pageDescription = 'Conoce el legado de CortiGlow. Más de 12 años liderando el diseño de interiores con cortinas, persianas e iluminación premium en toda Colombia.';
+const pageKeywords = 'nosotros cortiglow, experiencia cortinas, iluminación bogota, persianas santa rosa del sur, diseño interiores colombia';
+---
+
+<Layout 
+	title={pageTitle}
+	description={pageDescription}
+	keywords={pageKeywords}
+>
+	<!-- Hero Section "Nosotros" -->
+	<section class="relative min-h-[50vh] flex items-center justify-center overflow-hidden bg-trueblack-900 pt-32 pb-16">
+		<div class="absolute inset-0 z-0 opacity-40">
+			<div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_var(--tw-gradient-stops))] from-gold-900/40 via-trueblack-900 to-trueblack-900"></div>
+			<!-- Imagen de fondo representativa (Stock elegante o textura) -->
+			<div class="absolute inset-0 bg-trueblack-900 bg-opacity-80"></div>
+		</div>
+
+		<div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+			<h1 class="font-heading text-5xl md:text-7xl font-black text-white mb-6">
+				Nuestra <span class="bg-gradient-to-r from-gold-300 via-gold-400 to-gold-600 bg-clip-text text-transparent">Historia</span>
+			</h1>
+			<p class="text-xl md:text-2xl text-gray-400 font-light leading-relaxed">
+				Más de una década transformando espacios vacíos en experiencias visuales y confort absoluto.
+			</p>
+		</div>
+	</section>
+
+	<!-- Contenido Principal -->
+	<section class="py-24 bg-trueblack-900 relative z-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+				<!-- Text Content -->
+				<div class="space-y-8">
+					<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+						<span class="text-gold-400 font-bold">12+</span>
+						<span class="text-sm font-medium text-gray-300 uppercase tracking-widest">Años de Excelencia</span>
+					</div>
+
+					<h2 class="text-3xl md:text-5xl font-heading font-bold text-white leading-tight">
+						Expertos en crear <br />
+						<span class="bg-gradient-to-r from-gold-400 to-gold-600 bg-clip-text text-transparent">ambientes inolvidables</span>
+					</h2>
+
+					<p class="text-gray-400 font-light text-lg leading-relaxed">
+						En CortiGlow entendemos que tu espacio es un reflejo de tu identidad. Con <strong class="text-white font-medium">más de 12 años de experiencia</strong> comprobada en Colombia, nos hemos consolidado como los referentes absolutos en integración de cortinas, persianas e iluminación arquitectónica y decorativa.
+					</p>
+
+					<p class="text-gray-400 font-light text-lg leading-relaxed">
+						Trabajamos de la mano con las más prestigiosas marcas globales para ofrecerte soluciones elegantes, tecnológicas y duraderas que elevan el prestigio de tu hogar u oficina técnica y estéticamente.
+					</p>
+				</div>
+
+				<!-- Stats / Image Side -->
+				<div class="relative grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
+					<div class="absolute -inset-4 bg-gradient-to-tr from-gold-500/20 to-transparent blur-2xl -z-10 rounded-full"></div>
+					
+					<!-- Stat 1 -->
+					<div class="bg-gradient-to-br from-trueblack-800 to-[rgba(15,15,15,0.8)] p-8 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.05)] w-full">
+						<span class="text-5xl font-heading font-black text-gold-400 mb-2">12+</span>
+						<span class="text-sm text-gray-400 uppercase tracking-widest leading-relaxed">Años de<br/>Experiencia</span>
+					</div>
+					
+					<!-- Stat 2 -->
+					<div class="bg-gradient-to-b from-trueblack-800 to-[rgba(15,15,15,0.8)] p-8 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col items-center justify-center text-center transition-all duration-300 hover:border-gold-500/30 hover:shadow-[0_0_30px_rgba(212,175,55,0.05)] w-full">
+						<div class="mb-4 text-gold-400">
+							<svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+						</div>
+						<span class="text-sm text-gray-400 uppercase tracking-widest font-medium leading-relaxed">Calidad<br/>Garantizada</span>
+					</div>
+
+					<!-- Stat 3 (Wide) -->
+					<div class="sm:col-span-2 bg-[#0c0c0c] p-8 md:p-10 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col sm:flex-row items-center sm:justify-between text-center sm:text-left gap-6 group hover:border-gold-500/30 transition-all duration-300 w-full">
+						<div>
+							<span class="block text-3xl font-heading font-bold text-white mb-2 group-hover:text-gold-100 transition-colors">Cientos de</span>
+							<span class="text-gray-400 font-light text-lg">Clientes satisfechos</span>
+						</div>
+						<div class="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-gold-500/10 transition-colors shrink-0">
+							<svg class="w-8 h-8 text-gold-500 animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Sedes / Ubicaciones -->
+	<section class="py-24 bg-trueblack-900 border-t border-white/5 relative">
+		<!-- Decoración de fondo -->
+		<div class="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none"></div>
+
+		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+			<div class="text-center mb-16">
+				<h2 class="text-sm font-bold tracking-widest text-gold-500 uppercase mb-3">Nuestra Presencia</h2>
+				<h3 class="text-3xl md:text-5xl font-heading font-bold text-white">Dónde Encontrarnos</h3>
+				<p class="mt-4 text-gray-400 font-light max-w-2xl mx-auto">
+					Contamos con dos sedes estratégicas para brindar cobertura y atención personalizada a nuestros clientes. Envíos a nivel nacional.
+				</p>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+				
+				<!-- Sede Bogotá -->
+				<div class="group relative bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] rounded-[2rem] p-10 border border-white/5 hover:border-gold-500/30 transition-all duration-500 overflow-hidden">
+					<div class="absolute -right-10 -bottom-10 w-48 h-48 bg-gold-600/10 rounded-full blur-[40px] group-hover:bg-gold-500/20 transition-all duration-500 z-0"></div>
+					<div class="relative z-10">
+						<div class="flex items-center gap-4 mb-6">
+							<div class="w-14 h-14 bg-white/5 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center flex-shrink-0">
+								<svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+							</div>
+							<div>
+								<h4 class="text-2xl font-heading font-bold text-white">Bogotá, D.C.</h4>
+								<p class="text-gold-500 font-medium text-sm">Sede Principal - Centro de Diseño</p>
+							</div>
+						</div>
+						<p class="text-gray-400 font-light leading-relaxed mb-6">
+							Nuestra sede en la capital es el núcleo de nuestra operación y diseño, donde concebimos los estilos más vanguardistas para el centro del país.
+						</p>
+					</div>
+				</div>
+
+				<!-- Sede Santa Rosa -->
+				<div class="group relative bg-[#0c0c0c] rounded-[2rem] p-10 border border-white/5 hover:border-gold-500/30 transition-all duration-500 overflow-hidden">
+					<div class="absolute -right-10 -bottom-10 w-48 h-48 bg-gold-600/10 rounded-full blur-[40px] group-hover:bg-gold-500/20 transition-all duration-500 z-0"></div>
+					<div class="relative z-10">
+						<div class="flex items-center gap-4 mb-6">
+							<div class="w-14 h-14 bg-white/5 backdrop-blur-md rounded-full border border-white/10 flex items-center justify-center flex-shrink-0">
+								<svg class="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12l-1.5 1.5M12 21l-1.5-1.5M3 12l1.5-1.5M12 3l1.5 1.5M15 15l1.5-1.5M9 9l-1.5-1.5m6 0L15 6M9 15l-1.5 1.5"/></svg>
+							</div>
+							<div>
+								<h4 class="text-2xl font-heading font-bold text-white">Santa Rosa del Sur</h4>
+								<p class="text-gold-500 font-medium text-sm">Bolívar - Sede Regional</p>
+							</div>
+						</div>
+						<p class="text-gray-400 font-light leading-relaxed mb-6">
+							Atendiendo a la región Caribe y el Magdalena Medio, llevando calidad premium y asesoría impecable a los climas más exigentes.
+						</p>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA -->
+	<section class="py-24 relative overflow-hidden bg-trueblack-900 border-t border-white/5">
+		<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+			<h2 class="text-3xl md:text-5xl font-heading font-black mb-6 text-white">Confía en los <span class="bg-gradient-to-r from-gold-300 to-gold-600 bg-clip-text text-transparent">Expertos</span></h2>
+			<p class="text-lg text-gray-400 mb-10 font-light max-w-xl mx-auto">
+				Más de 12 años demostrando por qué somos líderes en decoración de interiores. Agenda tu asesoría gratuita hoy y permítenos dar vida a tu próximo proyecto.
+			</p>
+			
+			<a 
+				href="https://wa.me/573229468431?text=Hola,%20quiero%20agendar%20una%20asesor%C3%ADa%20gratuita" 
+				target="_blank"
+				rel="noopener noreferrer"
+				class="inline-flex px-8 py-4 bg-gradient-to-r from-gold-400 to-gold-600 text-trueblack-900 rounded-full font-bold text-lg hover:from-gold-300 hover:to-gold-500 transition-all shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:shadow-[0_0_30px_rgba(212,175,55,0.6)] transform hover:-translate-y-1"
+			>
+				Agenda tu Asesoría Gratuita
+			</a>
+		</div>
+	</section>
+</Layout>

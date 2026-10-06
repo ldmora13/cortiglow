@@ -1,0 +1,18 @@
+# robots.txt for CortiGlow
+
+User-agent: *
+Allow: /
+Allow: /producto/
+Allow: /categoria/
+
+Disallow: /api/
+Disallow: /admin/
+
+Sitemap: https://cortiglow.com/sitemap.xml
+
+# Crawl-delay for polite bots
+Crawl-delay: 1
+
+
+
+

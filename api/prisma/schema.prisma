@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
+  relationMode = "prisma"
+}
+
+model Profile {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password_hash String
+  full_name String?
+  role          String   @default("editor") // 'admin' | 'editor'
+  is_active     Boolean  @default(true)
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  audit_logs    AuditLog[]
+
+  @@map("profiles")
+}
+
+// Proveedores
+model Provider {
+  id               String    @id @default(uuid())
+  name             String
+  nit              String?
+  contact_name     String?
+  phone            String?
+  email            String?
+  address          String?
+  delivery_time    String?   // Ej: "3 a 5 días hábiles"
+  notes            String?
+  is_active        Boolean   @default(true)
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+  products         Product[]
+
+  @@map("providers")
+}
+
+model Category {
+  id        String     @id @default(uuid())
+  name      String
+  slug      String     @unique
+  image_url String?
+  parent_id String?
+  parent    Category?  @relation("SubCategories", fields: [parent_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  children  Category[] @relation("SubCategories")
+  products  Product[]
+  is_active Boolean    @default(true)
+  created_at DateTime  @default(now())
+
+  @@map("categories")
+  @@index([parent_id])
+}
+
+model Product {
+  id          String      @id @default(uuid())
+  name        String
+  sku         String      @unique
+  description String?
+  price       Decimal     @db.Decimal(15, 0) // Precios en COP (sin decimales)
+  cost        Decimal?    @default(0) @db.Decimal(15, 0) // Costo de compra
+  images      String[]
+  video_url   String?
+  category_id String?
+  category    Category?   @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  provider_id String?
+  provider    Provider?   @relation(fields: [provider_id], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  inventory   Inventory?
+  order_items OrderItem[]
+  quote_items QuoteItem[]
+  is_active   Boolean     @default(true)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+
+  @@map("products")
+  @@index([category_id]) // Index for performance
+}
+
+// Inventario por Producto
+model Inventory {
+  id           String              @id @default(uuid())
+  product_id   String              @unique
+  product      Product             @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  quantity     Int                 @default(0)
+  min_stock    Int                 @default(5) // Alerta de stock minimo
+  location     String?             // Ubicacion fisica (ej: "Bodega A", "Estante 3")
+  last_restock DateTime?
+  created_at   DateTime            @default(now())
+  updated_at   DateTime            @updatedAt
+  movements    InventoryMovement[]
+
+  @@map("inventory")
+  @@index([product_id])
+}
+
+// Historial de Movimientos de Inventario
+model InventoryMovement {
+  id           String    @id @default(uuid())
+  inventory_id String
+  inventory    Inventory @relation(fields: [inventory_id], references: [id], onDelete: Cascade)
+  type         String    // 'IN' (entrada) | 'OUT' (salida) | 'ADJUSTMENT' (ajuste)
+  quantity     Int       // Positivo para entradas, negativo para salidas
+  reason       String    // "Compra", "Venta", "Devolucion", "Ajuste manual", etc.
+  reference_id String?   // ID de orden si es por venta
+  notes        String?
+  performed_by String?   // ID del usuario que realizo el movimiento
+  created_at   DateTime  @default(now())
+
+  @@map("inventory_movements")
+  @@index([inventory_id])
+  @@index([created_at])
+}
+
+// Clientes
+model Customer {
+  id              String   @id @default(uuid())
+  name            String
+  email           String?
+  phone           String   // +57XXXXXXXXXX
+  address         String?
+  city            String?  // Bogota, Medellin, Cali, etc.
+  department      String?  // Cundinamarca, Antioquia, Valle del Cauca, etc.
+  document_type   String?  // 'CC' | 'NIT' | 'CE' | 'Pasaporte'
+  document_number String?
+  notes           String?
+  orders          Order[]
+  quotes          Quote[]
+  is_active       Boolean  @default(true)
+  created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
+
+  @@map("customers")
+  @@index([phone])
+  @@index([email])
+}
+
+// Ordenes/Pedidos
+model Order {
+  id                    String      @id @default(uuid())
+  order_number          String      @unique // "ORD-2024-0001"
+  customer_id           String
+  customer              Customer    @relation(fields: [customer_id], references: [id], onDelete: Restrict)
+  status                String      @default("pending") // 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
+  subtotal              Decimal     @db.Decimal(15, 0)
+  discount              Decimal     @default(0) @db.Decimal(15, 0)
+  tax                   Decimal     @default(0) @db.Decimal(15, 0) // IVA 19%
+  total                 Decimal     @db.Decimal(15, 0)
+  payment_method        String      // 'efectivo' | 'nequi' | 'daviplata' | 'pse' | 'transferencia' | 'tarjeta'
+  payment_status        String      @default("pending") // 'pending' | 'paid' | 'partial' | 'refunded'
+  delivery_method       String?     // 'pickup' | 'delivery'
+  delivery_address      String?
+  delivery_cost         Decimal     @default(0) @db.Decimal(15, 0)
+  notes                 String?
+  items                 OrderItem[]
+  payments              Payment[]
+  converted_from_quote  Quote?      // Relacion inversa
+  created_by            String?     // ID del usuario que creo la orden
+  is_active             Boolean     @default(true)
+  created_at            DateTime    @default(now())
+  updated_at            DateTime    @updatedAt
+  completed_at          DateTime?
+
+  @@map("orders")
+  @@index([customer_id])
+  @@index([status])
+  @@index([created_at])
+  @@index([order_number])
+}
+
+// Items de Orden
+model OrderItem {
+  id         String   @id @default(uuid())
+  order_id   String
+  order      Order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product_id String
+  product    Product  @relation(fields: [product_id], references: [id], onDelete: Restrict)
+  quantity   Int
+  unit_price Decimal  @db.Decimal(15, 0) // Precio al momento de la venta
+  subtotal   Decimal  @db.Decimal(15, 0) // quantity * unit_price
+  created_at DateTime @default(now())
+
+  @@map("order_items")
+  @@index([order_id])
+  @@index([product_id])
+}
+
+// Pagos
+model Payment {
+  id         String   @id @default(uuid())
+  order_id   String
+  order      Order    @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  amount     Decimal  @db.Decimal(15, 0)
+  method     String   // 'efectivo' | 'nequi' | 'daviplata' | 'pse' | 'transferencia' | 'tarjeta'
+  reference  String?  // Numero de transaccion/referencia
+  status     String   @default("completed") // 'completed' | 'pending' | 'failed'
+  notes      String?
+  created_by String?
+  created_at DateTime @default(now())
+
+  @@map("payments")
+  @@index([order_id])
+  @@index([created_at])
+}
+
+// Terminaciones para Cortinas
+model Finish {
+  id          String      @id @default(uuid())
+  name        String      // Ej: "Ojales", "Cinta", "Riel", "Argollas"
+  description String?
+  price_type  String      // 'FIXED' | 'PER_METER' | 'PERCENTAGE'
+  price       Decimal     @db.Decimal(15, 0) // Precio en COP
+  is_active   Boolean     @default(true)
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @updatedAt
+  quote_items QuoteItem[]
+
+  @@map("finishes")
+}
+
+// Cotizaciones
+model Quote {
+  id                 String      @id @default(uuid())
+  quote_number       String      @unique // QT-2024-0001
+  customer_id        String
+  customer           Customer    @relation(fields: [customer_id], references: [id], onDelete: Restrict)
+  status             String      @default("draft") // draft, sent, accepted, rejected, converted, expired
+  subtotal           Decimal     @db.Decimal(15, 0)
+  discount           Decimal     @default(0) @db.Decimal(15, 0)
+  tax                Decimal     @default(0) @db.Decimal(15, 0)
+  total              Decimal     @db.Decimal(15, 0)
+  notes              String?
+  valid_until        DateTime    // Fecha de vigencia
+  converted_order_id String?     @unique // Si se convirtio a orden
+  converted_order    Order?      @relation(fields: [converted_order_id], references: [id])
+  created_by         String?     // ID del usuario admin
+  is_active          Boolean     @default(true)
+  created_at         DateTime    @default(now())
+  updated_at         DateTime    @updatedAt
+  items              QuoteItem[]
+
+  @@map("quotes")
+  @@index([customer_id])
+  @@index([status])
+  @@index([valid_until])
+}
+
+// Items de Cotizacion
+model QuoteItem {
+  id            String   @id @default(uuid())
+  quote_id      String
+  quote         Quote    @relation(fields: [quote_id], references: [id], onDelete: Cascade)
+  product_id    String
+  product       Product  @relation(fields: [product_id], references: [id], onDelete: Restrict)
+  item_type     String   // 'unit' (iluminacion) | 'curtain' (cortina)
+  quantity      Int      @default(1) // Para iluminacion
+  unit_price    Decimal  @db.Decimal(15, 0)
+  
+  // Campos especificos para cortinas
+  width_meters  Decimal? @db.Decimal(10, 2) // Ancho en metros
+  height_meters Decimal? @db.Decimal(10, 2) // Alto en metros
+  square_meters Decimal? @db.Decimal(10, 2) // m² calculados
+  fabric_type   String?  // Tipo de tela
+  finish_id     String?  // Terminacion seleccionada
+  finish        Finish?  @relation(fields: [finish_id], references: [id], onDelete: Restrict)
+  finish_price  Decimal? @db.Decimal(15, 0) // Precio de terminacion aplicado
+  
+  subtotal      Decimal  @db.Decimal(15, 0)
+  created_at    DateTime @default(now())
+
+  @@map("quote_items")
+  @@index([quote_id])
+  @@index([product_id])
+}
+
+// Registro de Auditoría
+model AuditLog {
+  id            String   @id @default(uuid())
+  entity_type   String   // Ej: 'PRODUCT', 'ORDER', 'CUSTOMER', 'USER'
+  entity_id     String   // El ID del registro afectado
+  action        String   // Ej: 'CREATE', 'UPDATE', 'DELETE'
+  performed_by  String   // El ID del usuario que hizo la accion
+  user          Profile  @relation(fields: [performed_by], references: [id], onDelete: Restrict)
+  old_values    Json?    // Valores previos (Antes)
+  new_values    Json?    // Valores actualizados (Despues)
+  ip_address    String?  // Opcional
+  created_at    DateTime @default(now())
+
+  @@map("audit_logs")
+  @@index([entity_type, entity_id])
+  @@index([performed_by])
+  @@index([created_at])
+}

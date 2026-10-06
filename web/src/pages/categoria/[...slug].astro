@@ -1,0 +1,110 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import ProductGrid from '../../components/ProductGrid';
+import { CategoryService } from '../../services/category.service';
+
+export async function getStaticPaths() {
+  // Intentamos obtener las categorías de la API
+  const categories = await CategoryService.getCategories();
+  const dbslugs = categories.map((c: any) => c.slug);
+  
+  // Siempre inyectar nuestras 2 rutas principales para evitar 404 incluso si la DB falla en el build
+  const defaultSlugs = ['iluminacion', 'cortinas'];
+  const allSlugs = [...new Set([...dbslugs, ...defaultSlugs])];
+  
+  return allSlugs.map(slug => ({
+    params: { slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+if (!slug) return Astro.redirect('/404');
+
+// Analizar slug: "iluminacion" vs "iluminacion/colgantes"
+const parts = slug.split('/');
+const lastSlug = parts[parts.length - 1];
+
+// 1. Buscar la categoría por el último slug
+let category: any = null;
+let catError = false;
+
+try {
+  const categories = await CategoryService.getCategories();
+  category = categories.find((c: any) => c.slug === lastSlug);
+  if (!category) catError = true;
+} catch (e) {
+  catError = true;
+}
+
+// Fallback elegante en caso de que la DB no responda o el slug no exista (mock)
+if (catError || !category) {
+   category = {
+     id: null,
+     name: lastSlug === 'iluminacion' ? 'Iluminación' : (lastSlug === 'cortinas' ? 'Cortinas y Persianas' : lastSlug),
+     parent_id: null
+   };
+}
+
+
+
+const title = `${category.name} Premium | CortiGlow Colombia`;
+const description = `Descubre nuestra exclusiva línea de ${category.name}. La fusión perfecta entre diseño de vanguardia, tecnología y calidad premium en Colombia.`;
+---
+
+<Layout title={title} description={description}>
+    <!-- Hero Section de la Categoría -->
+    <section class="relative min-h-[40vh] flex flex-col items-center justify-center overflow-hidden bg-trueblack-900 pt-32 pb-16">
+        <div class="absolute inset-0 z-0">
+            <!-- Gradiente de fondo -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-gold-900/30 via-trueblack-900 to-trueblack-900"></div>
+            <!-- Glow animado -->
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-gold-500/10 rounded-full blur-[100px] mix-blend-screen pointer-events-none"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 mb-6 text-sm text-gray-500 font-medium tracking-widest uppercase">
+                <a href="/" class="hover:text-gold-400 transition-colors">Inicio</a>
+                <span class="text-white/20">/</span>
+                <span class="text-gold-500 font-bold">{category.name}</span>
+            </div>
+            <h1 class="font-heading text-4xl md:text-6xl font-black text-white mb-6">
+                Colección <br/>
+                <span class="bg-gradient-to-r from-gold-300 via-gold-400 to-gold-600 bg-clip-text text-transparent">{category.name}</span>
+            </h1>
+            <p class="mt-4 max-w-2xl text-lg text-gray-400 font-light mx-auto leading-relaxed">
+				Cada elemento de esta colección ha sido diseñado para aportar funcionalidad excepcional y una estética inigualable a tus espacios.
+			</p>
+        </div>
+    </section>
+
+    <!-- Content Grid -->
+    <section class="py-16 bg-trueblack-900 border-t border-white/5 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <ProductGrid client:load categorySlug={lastSlug} />
+        </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="py-20 bg-trueblack-900 text-center relative overflow-hidden border-t border-white/5">
+        <div class="absolute inset-0 bg-gradient-radial from-gold-900/10 to-transparent pointer-events-none"></div>
+        <div class="relative z-10 max-w-2xl mx-auto px-4">
+            <h3 class="text-2xl font-heading font-bold text-white mb-4">¿Buscas algo aún más exclusivo?</h3>
+            <p class="text-gray-400 mb-8 font-light max-w-lg mx-auto">Contamos con un extenso portafolio privado y la capacidad de diseñar la pieza exacta que elevará el prestigio de tu espacio.</p>
+            <a 
+                href="https://wa.me/573229468431?text=Hola,%20necesito%20asesor%C3%ADa%20sobre%20sus%20colecciones"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex px-8 py-3 bg-white/5 backdrop-blur-md text-white border border-white/10 rounded-full font-bold hover:bg-white/10 hover:border-gold-500/50 transition-all shadow-lg"
+            >
+                Hablar con un Asesor
+            </a>
+        </div>
+    </section>
+</Layout>
+
+
+
+
+
