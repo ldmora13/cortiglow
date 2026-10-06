@@ -1,7 +1,7 @@
 // components/ParallaxLighting.tsx
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { useRef, useEffect, useState } from "react";
+import { gsap } from "../lib/gsap";
 
 interface ParallaxLightingProps {
   children: React.ReactNode;
@@ -10,8 +10,6 @@ interface ParallaxLightingProps {
   speed?: number;
   className?: string;
 }
-
-gsap.registerPlugin(gsap.ScrollTrigger);
 
 export function ParallaxLighting({
   children,

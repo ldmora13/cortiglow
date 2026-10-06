@@ -1,7 +1,7 @@
 // components/ScrollReveal.tsx
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { useRef, useEffect, useState } from "react";
+import { gsap } from "../lib/gsap";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -15,8 +15,6 @@ interface ScrollRevealProps {
   once?: boolean;
   threshold?: number;
 }
-
-gsap.registerPlugin(gsap.ScrollTrigger);
 
 export function ScrollReveal({
   children,

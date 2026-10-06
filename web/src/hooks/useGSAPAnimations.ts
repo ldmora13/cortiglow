@@ -1,10 +1,8 @@
 // hooks/useGSAPAnimations.ts
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { useRef } from "react";
 import type { ReactNode } from "react";
-
-gsap.registerPlugin(gsap.ScrollTrigger);
+import { gsap } from "../lib/gsap";
 
 interface GSAPAnimationsProps {
   children: ReactNode;

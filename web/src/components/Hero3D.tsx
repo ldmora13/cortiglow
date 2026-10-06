@@ -1,8 +1,8 @@
 // components/Hero3D.tsx
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { useRef } from "react";
 import { useReducedMotion } from "motion/react";
+import { gsap } from "../lib/gsap";
 
 interface Hero3DProps {
   children: React.ReactNode;
@@ -12,8 +12,6 @@ interface Hero3DProps {
   intensity?: number;
   className?: string;
 }
-
-gsap.registerPlugin(gsap.ScrollTrigger);
 
 export function Hero3D({
   children,
