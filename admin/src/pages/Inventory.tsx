@@ -43,9 +43,6 @@ export default function Inventory() {
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [adjustQuantity, setAdjustQuantity] = useState('');
   const [adjustReason, setAdjustReason] = useState('');
-  const [initializing, setInitializing] = useState(false);
-
-
 
   const handleAdjustStock = async (e: React.FormEvent) => {
     e.preventDefault();

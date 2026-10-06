@@ -143,7 +143,7 @@ export default function AuditLogs() {
             >
               <option value="">Todos los usuarios</option>
               {users?.map(u => (
-                <option key={u.id} value={u.id}>{u.full_name || u.email}</option>
+                <option key={u.id} value={u.id}>{u.name || u.email}</option>
               ))}
               <option value="SYSTEM">Sistema Automático</option>
             </select>
