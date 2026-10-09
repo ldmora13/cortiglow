@@ -10,7 +10,6 @@ export default function Products() {
   const { products, categories, isLoadingProducts, deleteProduct } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
-  const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkDeleting, setBulkDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -67,7 +66,7 @@ export default function Products() {
     setSelectedIds(prev => allSelected ? prev.filter(id => !pageIds.includes(id)) : [...new Set([...prev, ...pageIds])]);
   };
 
-  const cell = density === 'compact' ? 'px-4 py-2' : 'px-6 py-4';
+  const cell = 'px-6 py-4';
 
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -168,16 +167,6 @@ export default function Products() {
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
             </button>
           </div>
-          {viewMode === 'list' && (
-            <button
-              onClick={() => setDensity(d => d === 'compact' ? 'comfortable' : 'compact')}
-              aria-pressed={density === 'compact'}
-              title={density === 'compact' ? 'Vista cómoda' : 'Vista densa'}
-              className="px-3 py-2 min-h-[44px] rounded-xl border border-zinc-200 bg-white text-xs font-bold text-zinc-600 hover:border-zinc-400 hover:text-zinc-900 transition-colors shrink-0"
-            >
-              {density === 'compact' ? 'Cómodo' : 'Denso'}
-            </button>
-          )}
         </div>
       </div>
 
@@ -345,7 +334,7 @@ export default function Products() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-bold text-gray-900">{product.name}</div>
-                          {product.description && density === 'comfortable' && (
+                          {product.description && (
                             <div className="text-xs text-zinc-500 line-clamp-1 max-w-xs">{product.description}</div>
                           )}
                         </div>

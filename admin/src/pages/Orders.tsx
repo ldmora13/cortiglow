@@ -20,7 +20,6 @@ export default function Orders() {
   const [statusFilter, setStatusFilter] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
-  const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [bulkWorking, setBulkWorking] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,7 +99,7 @@ export default function Orders() {
     }
   };
 
-  const cell = density === 'compact' ? 'px-4 py-2' : 'px-6 py-4';
+  const cell = 'px-6 py-4';
 
   const filteredOrders = orders.filter((order: any) => {
     const search = searchTerm.toLowerCase();
@@ -249,16 +248,6 @@ export default function Orders() {
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
             </button>
           </div>
-          {viewMode === 'list' && (
-            <button
-              onClick={() => setDensity(d => d === 'compact' ? 'comfortable' : 'compact')}
-              aria-pressed={density === 'compact'}
-              title={density === 'compact' ? 'Vista cómoda' : 'Vista densa'}
-              className="px-3 py-2 min-h-[44px] rounded-xl border border-zinc-200 bg-white text-xs font-bold text-zinc-600 hover:border-zinc-400 hover:text-zinc-900 transition-colors shrink-0"
-            >
-              {density === 'compact' ? 'Cómodo' : 'Denso'}
-            </button>
-          )}
         </div>
       </div>
 
