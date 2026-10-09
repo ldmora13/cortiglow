@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import clsx from 'clsx';
 import NotificationContainer from './NotificationContainer';
 import { Users, FileText, ShoppingCart, Package, Tags, Layers, Box, BarChart3, Shield, History } from 'lucide-react';
@@ -10,14 +10,7 @@ export default function Layout() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    const saved = localStorage.getItem('sidebarCollapsed');
-    return saved ? JSON.parse(saved) : false;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('sidebarCollapsed', JSON.stringify(isCollapsed));
-  }, [isCollapsed]);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   if (loading) {
     return (
@@ -115,21 +108,19 @@ export default function Layout() {
       )}>
         {/* Logo/Brand */}
         <div className={clsx(
-          "flex-shrink-0 px-4 py-4 border-b border-zinc-200 bg-white flex items-center relative",
-          isCollapsed ? "justify-center" : "justify-between"
+          "flex-shrink-0 px-4 py-4 border-b border-zinc-200 bg-white flex items-center relative justify-between",
+          isCollapsed && "lg:justify-center"
         )}>
           <Link to="/" onClick={closeMobileMenu} className="flex items-center space-x-3 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900" aria-label="Ir al panel principal">
             <div className="flex items-center justify-center">
               <img src="/logo.png" alt="CortiGlow Logo" className="h-10 w-auto object-contain drop-shadow-md" />
             </div>
-            {!isCollapsed && (
-              <div>
-                <h1 className="text-base font-bold text-zinc-900 leading-tight">
-                  CortiGlow
-                </h1>
-                <p className="text-xs text-zinc-500 font-medium">Panel Admin</p>
-              </div>
-            )}
+            <div className={clsx(isCollapsed && "lg:hidden")}>
+              <h1 className="text-base font-bold text-zinc-900 leading-tight">
+                CortiGlow
+              </h1>
+              <p className="text-xs text-zinc-500 font-medium">Panel Admin</p>
+            </div>
           </Link>
           {/* Toggle Collapse - Desktop only */}
           <button 
@@ -165,21 +156,21 @@ export default function Layout() {
                 to={item.path}
                 onClick={closeMobileMenu}
                 className={clsx(
-                  'flex items-center rounded-xl mb-1 transition-colors min-h-[44px]',
-                  isCollapsed ? 'justify-center px-0 py-3' : 'space-x-3 px-3.5 py-2.5',
+                  'group relative flex items-center rounded-xl mb-1 transition-colors min-h-[44px] space-x-3 px-3.5 py-2.5',
+                  isCollapsed && 'lg:justify-center lg:space-x-0 lg:px-0',
                   isActive
                     ? 'bg-zinc-900 text-white font-semibold shadow-sm'
                     : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'
                 )}
               >
-                <div className={clsx(isCollapsed && "group-hover:scale-110 transition-transform")}>
+                <div className={clsx(isCollapsed && "lg:group-hover:scale-110 lg:transition-transform")}>
                   {item.icon}
                 </div>
-                {!isCollapsed && <span className="text-sm font-medium">{item.name}</span>}
+                <span className={clsx('text-sm font-medium', isCollapsed && 'lg:hidden')}>{item.name}</span>
                 
                 {/* Tooltip for Collapsed Mode */}
                 {isCollapsed && (
-                  <div role="tooltip" className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-zinc-900 text-white text-xs font-semibold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50 shadow-lg">
+                  <div role="tooltip" className="hidden lg:block absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-zinc-900 text-white text-xs font-semibold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50 shadow-lg">
                     {item.name}
                   </div>
                 )}
