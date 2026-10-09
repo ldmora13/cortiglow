@@ -17,6 +17,15 @@ export default function Users() {
   const itemsPerPage = 15;
   const { user: currentUser } = useAuth();
 
+  if (currentUser?.role !== 'admin') {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-gray-500 p-8">
+        <h2 className="text-xl font-medium">Acceso Denegado</h2>
+        <p className="mt-2">Solo los administradores pueden gestionar usuarios.</p>
+      </div>
+    );
+  }
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',

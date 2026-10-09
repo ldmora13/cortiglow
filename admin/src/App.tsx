@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import type { JSX } from 'react';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -33,6 +34,13 @@ const queryClient = new QueryClient({
   },
 });
 
+function RequireAdmin({ children }: { children: JSX.Element }) {
+  const { user, loading } = useAuth();
+  if (loading) return children;
+  if (user?.role !== 'admin') return <Navigate to="/" replace />;
+  return children;
+}
+
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -49,7 +57,7 @@ export default function App() {
               <Route path="/products/:id" element={<ProductForm />} />
               <Route path="/categories" element={<Categories />} />
               <Route path="/providers" element={<Providers />} />
-              <Route path="/users" element={<Users />} />
+              <Route path="/users" element={<RequireAdmin><Users /></RequireAdmin>} />
               <Route path="/inventory" element={<Inventory />} />
               <Route path="/inventory/movements" element={<InventoryMovements />} />
               <Route path="/customers" element={<Customers />} />
@@ -61,7 +69,7 @@ export default function App() {
               <Route path="/quotes" element={<Quotes />} />
               <Route path="/quotes/new" element={<QuoteForm />} />
               <Route path="/quotes/:id" element={<QuoteDetail />} />
-              <Route path="/audit" element={<AuditLogs />} />
+              <Route path="/audit" element={<RequireAdmin><AuditLogs /></RequireAdmin>} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" />} />

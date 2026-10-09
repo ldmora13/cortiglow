@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import NotificationContainer from './NotificationContainer';
-import { Users, FileText, ShoppingCart, Package, Tags, Layers, Box, Truck, BarChart3, Shield, History } from 'lucide-react';
+import { Users, FileText, ShoppingCart, Package, Tags, Layers, Box, BarChart3, Shield, History } from 'lucide-react';
 
 export default function Layout() {
   const { user, loading, signOut } = useAuth();
@@ -32,68 +32,68 @@ export default function Layout() {
   
   if (!user) return <Navigate to="/login" replace />;
 
+  const isAdmin = user?.role === 'admin';
+
   const navItems = [
-    { 
-      name: 'Clientes', 
+    ...(isAdmin
+      ? [
+          {
+            name: 'Usuarios',
+            path: '/users',
+            icon: <Shield className="w-5 h-5" />,
+          },
+        ]
+      : []),
+    {
+      name: 'Clientes',
       path: '/customers',
       icon: <Users className="w-5 h-5" />
     },
-    { 
-      name: 'Proveedores', 
-      path: '/providers',
-      icon: <Truck className="w-5 h-5" />
-    },
-    { 
-      name: 'Categorías', 
+    {
+      name: 'Categorías',
       path: '/categories',
       icon: <Tags className="w-5 h-5" />
     },
-    { 
-      name: 'Terminaciones', 
+    {
+      name: 'Terminaciones',
       path: '/finishes',
       icon: <Layers className="w-5 h-5" />
     },
-    { 
-      name: 'Productos', 
+    {
+      name: 'Productos',
       path: '/products',
       icon: <Package className="w-5 h-5" />
     },
-    { 
-      name: 'Inventario', 
+    {
+      name: 'Inventario',
       path: '/inventory',
       icon: <Box className="w-5 h-5" />
     },
-    { 
-      name: 'Cotizaciones', 
+    {
+      name: 'Cotizaciones',
       path: '/quotes',
       icon: <FileText className="w-5 h-5" />
     },
-    { 
-      name: 'Ventas', 
+    {
+      name: 'Ventas',
       path: '/orders',
       icon: <ShoppingCart className="w-5 h-5" />
     },
-    { 
-      name: 'Reportes', 
+    {
+      name: 'Reportes',
       path: '/reports',
       icon: <BarChart3 className="w-5 h-5" />
     },
+    ...(isAdmin
+      ? [
+          {
+            name: 'Auditoría',
+            path: '/audit',
+            icon: <History className="w-5 h-5" />,
+          },
+        ]
+      : []),
   ];
-
-  if (user?.role === 'admin') {
-    navItems.push(
-      {
-      name: 'Auditoría',
-      path: '/audit',
-      icon: <History className="w-5 h-5" />
-    },
-    { 
-      name: 'Usuarios', 
-      path: '/users',
-      icon: <Shield className="w-5 h-5" />
-    },
-  );
-  }
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -259,7 +259,7 @@ export default function Layout() {
                           <span className="min-w-0">
                             <span className="block text-sm font-bold text-zinc-900 truncate">{user.email}</span>
                             <span className="mt-0.5 inline-block text-[0.6875rem] font-bold uppercase tracking-wide text-zinc-500 bg-zinc-100 rounded-md px-1.5 py-0.5">
-                              {user.role === 'admin' ? 'Administrador' : 'Usuario'}
+                              {user.role === 'admin' ? 'Administrador' : 'Empleado'}
                             </span>
                           </span>
                         </div>
