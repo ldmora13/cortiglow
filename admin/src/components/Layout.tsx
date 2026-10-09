@@ -1,9 +1,85 @@
 import { Outlet, Link, useLocation, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import NotificationContainer from './NotificationContainer';
 import { Users, FileText, ShoppingCart, Package, Tags, Layers, Box, BarChart3, Shield, History } from 'lucide-react';
+
+interface NavItemData {
+  name: string;
+  path: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+// Tooltip con retardo renderizado en un portal: el nav tiene overflow-y-auto
+// y recortaría cualquier tooltip posicionado dentro de su caja.
+function NavItem({ item, active, collapsed, onNavigate }: {
+  item: NavItemData;
+  active: boolean;
+  collapsed: boolean;
+  onNavigate: () => void;
+}) {
+  const anchorRef = useRef<HTMLAnchorElement>(null);
+  const timer = useRef<number | null>(null);
+  const [tip, setTip] = useState<{ top: number; left: number } | null>(null);
+
+  const cancel = () => {
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
+      timer.current = null;
+    }
+    setTip(null);
+  };
+
+  useEffect(() => cancel, []);
+
+  const schedule = () => {
+    if (!collapsed) return;
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
+    timer.current = window.setTimeout(() => {
+      const rect = anchorRef.current?.getBoundingClientRect();
+      if (rect) setTip({ top: rect.top + rect.height / 2, left: rect.right + 12 });
+    }, 500);
+  };
+
+  return (
+    <Link
+      ref={anchorRef}
+      to={item.path}
+      onClick={() => { cancel(); onNavigate(); }}
+      onMouseEnter={schedule}
+      onMouseLeave={cancel}
+      onFocus={schedule}
+      onBlur={cancel}
+      className={clsx(
+        'group relative flex items-center rounded-xl mb-1 transition-colors min-h-[44px] space-x-3 px-3.5 py-2.5',
+        collapsed && 'lg:justify-center lg:space-x-0 lg:px-0',
+        active
+          ? 'bg-zinc-900 text-white font-semibold shadow-sm'
+          : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'
+      )}
+    >
+      <div className={clsx(collapsed && "lg:group-hover:scale-110 lg:transition-transform")}>
+        {item.icon}
+      </div>
+      <span className={clsx('text-sm font-medium', collapsed && 'lg:hidden')}>{item.name}</span>
+
+      {tip && collapsed && createPortal(
+        <div
+          role="tooltip"
+          style={{ top: tip.top, left: tip.left }}
+          className="hidden lg:block fixed z-[100] -translate-y-1/2 px-3 py-2 bg-zinc-900 text-white rounded-xl shadow-lg pointer-events-none w-max max-w-[220px]"
+        >
+          <p className="text-xs font-bold">{item.name}</p>
+          <p className="text-[11px] font-medium text-zinc-300 mt-0.5">{item.description}</p>
+        </div>,
+        document.body
+      )}
+    </Link>
+  );
+}
 
 export default function Layout() {
   const { user, loading, signOut } = useAuth();
@@ -33,6 +109,7 @@ export default function Layout() {
           {
             name: 'Usuarios',
             path: '/users',
+            description: 'Gestiona accesos y roles del sistema',
             icon: <Shield className="w-5 h-5" />,
           },
         ]
@@ -40,41 +117,49 @@ export default function Layout() {
     {
       name: 'Clientes',
       path: '/customers',
+      description: 'Administra la base de clientes',
       icon: <Users className="w-5 h-5" />
     },
     {
       name: 'Categorías',
       path: '/categories',
+      description: 'Organiza las familias del catálogo',
       icon: <Tags className="w-5 h-5" />
     },
     {
       name: 'Terminaciones',
       path: '/finishes',
+      description: 'Gestiona acabados y terminaciones',
       icon: <Layers className="w-5 h-5" />
     },
     {
       name: 'Productos',
       path: '/products',
+      description: 'Crea y edita el catálogo',
       icon: <Package className="w-5 h-5" />
     },
     {
       name: 'Inventario',
       path: '/inventory',
+      description: 'Controla stock y movimientos',
       icon: <Box className="w-5 h-5" />
     },
     {
       name: 'Cotizaciones',
       path: '/quotes',
+      description: 'Crea y envía cotizaciones',
       icon: <FileText className="w-5 h-5" />
     },
     {
       name: 'Ventas',
       path: '/orders',
+      description: 'Gestiona órdenes y pagos',
       icon: <ShoppingCart className="w-5 h-5" />
     },
     {
       name: 'Reportes',
       path: '/reports',
+      description: 'Analiza el desempeño del negocio',
       icon: <BarChart3 className="w-5 h-5" />
     },
     ...(isAdmin
@@ -82,6 +167,7 @@ export default function Layout() {
           {
             name: 'Auditoría',
             path: '/audit',
+            description: 'Historial de acciones del sistema',
             icon: <History className="w-5 h-5" />,
           },
         ]
@@ -147,36 +233,16 @@ export default function Layout() {
 
         {/* Navigation - Scrollable */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 custom-scrollbar">
-          {navItems.map((item) => {
-            const isActive = location.pathname === item.path || 
-                           (item.path !== '/' && location.pathname.startsWith(item.path));
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={closeMobileMenu}
-                className={clsx(
-                  'group relative flex items-center rounded-xl mb-1 transition-colors min-h-[44px] space-x-3 px-3.5 py-2.5',
-                  isCollapsed && 'lg:justify-center lg:space-x-0 lg:px-0',
-                  isActive
-                    ? 'bg-zinc-900 text-white font-semibold shadow-sm'
-                    : 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900'
-                )}
-              >
-                <div className={clsx(isCollapsed && "lg:group-hover:scale-110 lg:transition-transform")}>
-                  {item.icon}
-                </div>
-                <span className={clsx('text-sm font-medium', isCollapsed && 'lg:hidden')}>{item.name}</span>
-                
-                {/* Tooltip for Collapsed Mode */}
-                {isCollapsed && (
-                  <div role="tooltip" className="hidden lg:block absolute left-full ml-3 top-1/2 -translate-y-1/2 px-2.5 py-1.5 bg-zinc-900 text-white text-xs font-semibold rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity whitespace-nowrap z-50 shadow-lg">
-                    {item.name}
-                  </div>
-                )}
-              </Link>
-            );
-          })}
+          {navItems.map((item) => (
+            <NavItem
+              key={item.path}
+              item={item}
+              active={location.pathname === item.path ||
+                (item.path !== '/' && location.pathname.startsWith(item.path))}
+              collapsed={isCollapsed}
+              onNavigate={closeMobileMenu}
+            />
+          ))}
         </nav>
       </div>
 
