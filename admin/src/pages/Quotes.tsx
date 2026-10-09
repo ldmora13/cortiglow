@@ -65,30 +65,26 @@ export default function Quotes() {
   const paginatedQuotes = filteredQuotes.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 w-full">
       {/* Header */}
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
                 Cotizaciones
               </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
+              <p className="text-sm font-medium text-zinc-500">
                 {quotes.length} cotizaciones en total
               </p>
             </div>
             <Link
               to="/quotes/new"
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-sm min-h-[44px]"
+              className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nueva Cotización
             </Link>
-          </div>
-        </div>
       </div>
 
       {/* Barra de Búsqueda y Filtros Unificada */}
@@ -193,14 +189,14 @@ export default function Quotes() {
       </div>
 
       {filteredQuotes.length === 0 ? (
-        <div className="bg-white rounded-3xl shadow-md border border-zinc-200 p-12 text-center">
-          <div className="text-6xl mb-4">📋</div>
+        <div className="bg-white rounded-2xl shadow-md border border-zinc-200 p-12 text-center">
+          <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
           <p className="text-gray-500 font-medium mb-4">No se encontraron cotizaciones</p>
           <Link
             to="/quotes/new"
             className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 text-white rounded-xl font-bold shadow-sm hover:shadow-md transform hover:scale-105 transition-all"
           >
-            ➕ Crear Nueva
+            Crear Nueva
           </Link>
         </div>
       ) : viewMode === 'list' ? (
@@ -209,11 +205,11 @@ export default function Quotes() {
             <table className="min-w-full divide-y divide-zinc-200">
               <thead className="bg-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Número</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Cliente</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Estado</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Total</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Vigencia</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Número</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Cliente</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Estado</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Total</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Vigencia</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-zinc-100">
@@ -228,13 +224,13 @@ export default function Quotes() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-bold text-zinc-900">{quote.customer?.name}</div>
-                      <div className="text-xs text-zinc-500">📱 {quote.customer?.phone}</div>
+                      <div className="text-xs text-zinc-500">{quote.customer?.phone}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {getStatusBadge(quote.status)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-black text-zinc-900">{formatCOP(quote.total)}</div>
+                      <div className="text-sm font-bold text-zinc-900">{formatCOP(quote.total)}</div>
                       <div className="text-xs text-zinc-500">{quote.items?.length || 0} items</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -244,7 +240,7 @@ export default function Quotes() {
                         isExpiringSoon(quote.valid_until) && !isExpired(quote.valid_until) && "bg-orange-100 text-orange-700",
                         !isExpiringSoon(quote.valid_until) && !isExpired(quote.valid_until) && "bg-green-100 text-green-700"
                       )}>
-                        {isExpired(quote.valid_until) ? '⚠️ ' : isExpiringSoon(quote.valid_until) ? '⏰ ' : '✓ '}
+                        
                         {format(new Date(quote.valid_until), 'dd/MM/yyyy', { locale: es })}
                       </div>
                     </td>
@@ -290,16 +286,16 @@ export default function Quotes() {
                   <span className="text-xs font-bold text-zinc-600 truncate">{quote.quote_number}</span>
                   {getStatusBadge(quote.status)}
                 </div>
-                <h3 className="font-black text-base sm:text-lg text-gray-900 group-hover:text-zinc-600 transition-colors line-clamp-2">
+                <h3 className="font-bold text-base sm:text-lg text-gray-900 group-hover:text-zinc-600 transition-colors line-clamp-2">
                   {quote.customer?.name}
                 </h3>
-                <p className="text-xs text-zinc-600 mt-1 truncate">📱 {quote.customer?.phone}</p>
+                <p className="text-xs text-zinc-600 mt-1 truncate">{quote.customer?.phone}</p>
               </div>
 
               <div className="p-3 sm:p-4 space-y-3">
                 <div>
                   <p className="text-xs text-gray-500 uppercase font-semibold">Total</p>
-                  <p className="text-xl sm:text-2xl font-black text-zinc-600">{formatCOP(quote.total)}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-zinc-600">{formatCOP(quote.total)}</p>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-zinc-600">
                   <span className="font-semibold">{quote.items?.length || 0} items</span>
@@ -312,7 +308,7 @@ export default function Quotes() {
                     isExpiringSoon(quote.valid_until) && !isExpired(quote.valid_until) && "bg-orange-100 text-orange-700",
                     !isExpiringSoon(quote.valid_until) && !isExpired(quote.valid_until) && "bg-green-100 text-green-700"
                   )}>
-                    {isExpired(quote.valid_until) ? '⚠️ ' : isExpiringSoon(quote.valid_until) ? '⏰ ' : '✓ '}
+                    
                     {format(new Date(quote.valid_until), 'dd/MM/yyyy', { locale: es })}
                   </div>
                 </div>
@@ -326,7 +322,7 @@ export default function Quotes() {
       )}
 
       {viewMode === 'grid' && filteredQuotes.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredQuotes.length)} de {filteredQuotes.length} resultados
           </span>

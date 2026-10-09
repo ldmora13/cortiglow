@@ -75,7 +75,7 @@ export default function QuotePrint() {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
-          <div className="text-6xl mb-4">📄</div>
+          <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg></div>
           <p className="text-zinc-600">Preparando cotización para imprimir...</p>
         </div>
       </div>
@@ -124,13 +124,13 @@ export default function QuotePrint() {
         <div className="mb-8">
           <div className="flex items-start justify-between mb-6 border-b-4 border-zinc-300 pb-4">
             <div>
-              <h1 className="text-4xl font-black text-zinc-600">CortiGlow</h1>
+              <h1 className="text-4xl font-bold text-zinc-600">CortiGlow</h1>
               <p className="text-sm text-zinc-600 mt-1">Iluminación y Cortinas</p>
-              <p className="text-sm text-zinc-600">📱 +573229468431</p>
-              <p className="text-sm text-zinc-600">📍 Colombia</p>
+              <p className="text-sm text-zinc-600">+573229468431</p>
+              <p className="text-sm text-zinc-600">Colombia</p>
             </div>
             <div className="text-right">
-              <div className="text-3xl font-black text-gray-900 mb-2">COTIZACIÓN</div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">COTIZACIÓN</div>
               <div className="text-xl font-bold text-zinc-600">{quote.quote_number}</div>
               <div className="text-sm text-zinc-600 mt-2">
                 Fecha: {format(new Date(quote.created_at), 'dd/MM/yyyy', { locale: es })}
@@ -146,15 +146,15 @@ export default function QuotePrint() {
             <div className="text-xs font-bold text-gray-500 uppercase mb-2">Cliente</div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="font-black text-gray-900 text-lg">{quote.customer.name}</div>
-                <div className="text-sm text-gray-700 mt-1">📱 {quote.customer.phone}</div>
+                <div className="font-bold text-gray-900 text-lg">{quote.customer.name}</div>
+                <div className="text-sm text-gray-700 mt-1">{quote.customer.phone}</div>
                 {quote.customer.email && (
-                  <div className="text-sm text-gray-700">📧 {quote.customer.email}</div>
+                  <div className="text-sm text-gray-700">{quote.customer.email}</div>
                 )}
               </div>
               <div>
                 {quote.customer.address && (
-                  <div className="text-sm text-gray-700">📍 {quote.customer.address}</div>
+                  <div className="text-sm text-gray-700">{quote.customer.address}</div>
                 )}
                 {quote.customer.city && (
                   <div className="text-sm text-gray-700">{quote.customer.city}</div>
@@ -187,9 +187,9 @@ export default function QuotePrint() {
                     {item.item_type === 'curtain' && (
                       <div className="text-xs text-zinc-600 mt-1 space-y-0.5">
                         <div>📐 {item.width_meters}m × {item.height_meters}m = {item.square_meters?.toFixed(2)} m²</div>
-                        <div>🎨 Tela: {item.fabric_type}</div>
+                        <div>Tela: {item.fabric_type}</div>
                         {item.finish && (
-                          <div>✨ Terminación: {item.finish.name} ({formatCOP(item.finish_price || 0)})</div>
+                          <div>Terminación: {item.finish.name} ({formatCOP(item.finish_price || 0)})</div>
                         )}
                       </div>
                     )}
@@ -232,8 +232,8 @@ export default function QuotePrint() {
             </div>
             
             <div className="flex justify-between py-3 bg-zinc-900 text-white shadow-sm transition-all px-4 rounded-lg">
-              <span className="font-black text-lg">TOTAL:</span>
-              <span className="font-black text-2xl">{formatCOP(quote.total)}</span>
+              <span className="font-bold text-lg">TOTAL:</span>
+              <span className="font-bold text-2xl">{formatCOP(quote.total)}</span>
             </div>
           </div>
         </div>
@@ -272,7 +272,7 @@ export default function QuotePrint() {
           onClick={() => window.print()}
           className="px-6 py-3 bg-zinc-900 text-white shadow-sm transition-all rounded-lg font-bold shadow-sm hover:bg-blue-700 transition-all"
         >
-          🖨️ Imprimir
+          Imprimir
         </button>
         <button
           onClick={() => window.close()}

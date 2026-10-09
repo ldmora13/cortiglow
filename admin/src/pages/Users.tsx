@@ -144,30 +144,26 @@ export default function Users() {
   const paginatedUsers = filteredUsers.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
       {/* Header Premium */}
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
                 Usuarios
               </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
+              <p className="text-sm font-medium text-zinc-500">
                 Gestiona los accesos y roles del sistema
               </p>
             </div>
             <button
               onClick={() => handleOpenModal()}
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-md min-h-[44px]"
+              className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nuevo Usuario
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Barra de Búsqueda Unificada */}
@@ -228,11 +224,11 @@ export default function Users() {
       </div>
 
       {filteredUsers.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center shadow-sm border border-zinc-200">
+        <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-zinc-200">
           <div className="w-24 h-24 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
             <span className="text-4xl">👥</span>
           </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-3">No hay usuarios</h3>
+          <h3 className="text-lg font-bold text-zinc-900 mb-2">No hay usuarios</h3>
           <p className="text-zinc-500 text-lg mb-8 max-w-md mx-auto">
             {searchTerm ? 'No encontramos usuarios que coincidan con tu búsqueda.' : 'Crea el primer usuario del sistema.'}
           </p>
@@ -241,7 +237,7 @@ export default function Users() {
               onClick={() => handleOpenModal()}
               className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 text-white rounded-2xl font-bold shadow-sm active:scale-95 transition-all"
             >
-              ➕ Crear Primer Usuario
+              Crear Primer Usuario
             </button>
           )}
         </div>
@@ -251,10 +247,10 @@ export default function Users() {
           <table className="min-w-full divide-y divide-zinc-200">
             <thead className="bg-white">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Usuario</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Rol</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Fecha Registro</th>
-                <th className="px-6 py-4 text-right text-xs font-black text-zinc-500 uppercase tracking-wider">Acciones</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Usuario</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Rol</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Fecha Registro</th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-zinc-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-zinc-100">
@@ -378,7 +374,7 @@ export default function Users() {
                     <span className="text-xl font-bold text-white">{user.email?.charAt(0).toUpperCase()}</span>
                   </div>
                   <div className="overflow-hidden">
-                    <h3 className="font-black text-lg text-gray-900 truncate">{user.name || 'Sin Nombre'}</h3>
+                    <h3 className="font-bold text-lg text-gray-900 truncate">{user.name || 'Sin Nombre'}</h3>
                     <p className="text-sm text-zinc-500 truncate">{user.email}</p>
                   </div>
                 </div>
@@ -393,9 +389,9 @@ export default function Users() {
                   Registro: {user.created_at && new Date(user.created_at).toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' })}
                 </p>
                 <div className="flex gap-2">
-                  <button onClick={() => handleOpenModal(user)} className="flex-1 px-3 py-2 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors text-xs text-center shadow-sm">✏️ Editar</button>
+                  <button onClick={() => handleOpenModal(user)} className="flex-1 px-3 py-2 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors text-xs text-center shadow-sm">Editar</button>
                   <button onClick={() => handleOpenPasswordModal(user.id)} className="flex-1 px-3 py-2 bg-zinc-100 text-zinc-700 rounded-xl font-bold hover:bg-zinc-200 transition-colors text-xs text-center shadow-sm">🔑 Clave</button>
-                  <button onClick={() => handleDelete(user.id, user.email)} disabled={currentUser?.id === user.id} className={`px-3 py-2 rounded-xl font-bold transition-colors text-xs shadow-sm flex items-center justify-center ${currentUser?.id === user.id ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border border-red-200 text-red-500 hover:bg-red-50'}`}>🗑️</button>
+                  <button onClick={() => handleDelete(user.id, user.email)} disabled={currentUser?.id === user.id} className={`px-3 py-2 rounded-xl font-bold transition-colors text-xs shadow-sm flex items-center justify-center ${currentUser?.id === user.id ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white border border-red-200 text-red-500 hover:bg-red-50'}`}>Eliminar</button>
                 </div>
               </div>
             </div>
@@ -404,7 +400,7 @@ export default function Users() {
       )}
 
       {viewMode === 'grid' && filteredUsers.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredUsers.length)} de {filteredUsers.length} resultados
           </span>
@@ -430,20 +426,17 @@ export default function Users() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={handleCloseModal} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-100 to-teal-100 flex items-center justify-center border border-green-200/50 shadow-inner">
-                  <span className="text-2xl">{editingUser ? '✏️' : '👤'}</span>
-                </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     {editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">
@@ -487,7 +480,7 @@ export default function Users() {
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">Rol *</label>
                 <select value={formData.role} onChange={(e) => setFormData({ ...formData, role: e.target.value as 'admin' | 'employee' })} className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all bg-white appearance-none">
-                  <option value="editor">👤 Editor / Empleado</option>
+                  <option value="editor">Editor / Empleado</option>
                   <option value="admin">⭐ Admin</option>
                 </select>
               </div>
@@ -520,20 +513,17 @@ export default function Users() {
 
       {isPasswordModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={() => { setIsPasswordModalOpen(false); setPasswordUserId(null); setNewPassword(''); }} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-100 to-rose-100 flex items-center justify-center border border-red-200/50 shadow-inner">
-                  <span className="text-2xl">🔑</span>
-                </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     Cambiar Contraseña
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">

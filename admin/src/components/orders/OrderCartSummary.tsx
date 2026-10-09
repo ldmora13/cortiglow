@@ -29,7 +29,7 @@ export const OrderCartSummary: React.FC<OrderCartSummaryProps> = ({
     <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transform transition-all hover:shadow-md">
       <div className="bg-white border-b border-zinc-200 text-zinc-900 p-5">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-bold text-xl">🛒 Carrito</h3>
+          <h3 className="font-bold text-xl">Carrito</h3>
           {cart.length > 0 && (
             <span className="bg-zinc-100 px-3 py-1 rounded-full text-sm font-bold text-zinc-800">
               {cart.length}
@@ -115,7 +115,7 @@ export const OrderCartSummary: React.FC<OrderCartSummaryProps> = ({
         )}
         <div className="pt-3 mt-3 border-t border-gray-200 flex justify-between items-center">
           <span className="text-base font-bold text-gray-900">Total</span>
-          <span className="text-2xl font-black text-zinc-900">{formatCOP(total)}</span>
+          <span className="text-2xl font-bold text-zinc-900">{formatCOP(total)}</span>
         </div>
       </div>
     </div>

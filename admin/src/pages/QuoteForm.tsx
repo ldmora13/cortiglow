@@ -107,7 +107,7 @@ export default function QuoteForm() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black bg-white border-b border-zinc-200 bg-clip-text text-transparent">
+          <h1 className="text-xl sm:text-2xl font-bold text-zinc-900">
             Nueva Cotización
           </h1>
           <p className="text-zinc-600 mt-1 text-sm sm:text-base">Crea una cotización para nuestros clientes</p>

@@ -134,15 +134,13 @@ export default function Finishes() {
   const paginatedFinishes = filteredFinishes.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
                 Terminaciones
               </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
+              <p className="text-sm font-medium text-zinc-500">
                 Gestiona las terminaciones para nuestras cortinas
               </p>
             </div>
@@ -151,15 +149,13 @@ export default function Finishes() {
                 resetForm();
                 setShowModal(true);
               }}
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-md min-h-[44px]"
+              className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nueva Terminación
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Barra de Búsqueda Unificada */}
@@ -220,9 +216,9 @@ export default function Finishes() {
       </div>
 
       {filteredFinishes.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center shadow-sm border border-zinc-200">
-          <div className="text-6xl mb-4">🎨</div>
-          <h3 className="text-2xl font-black text-gray-900 mb-3">No hay terminaciones</h3>
+        <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-zinc-200">
+          <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 16h6" /></svg></div>
+          <h3 className="text-lg font-bold text-zinc-900 mb-2">No hay terminaciones</h3>
           <p className="text-zinc-500 text-lg mb-8 max-w-md mx-auto">
             {searchTerm ? 'No encontramos terminaciones que coincidan con tu búsqueda.' : 'Crea la primera terminación para cortinas'}
           </p>
@@ -234,7 +230,7 @@ export default function Finishes() {
               }}
               className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 text-white rounded-2xl font-bold shadow-sm"
             >
-              ➕ Crear Primera Terminación
+              Crear Primera Terminación
             </button>
           )}
         </div>
@@ -244,18 +240,18 @@ export default function Finishes() {
           <table className="min-w-full divide-y divide-zinc-200">
             <thead className="bg-white">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Nombre</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Descripción</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Tipo de Precio</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Precio</th>
-                <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Estado</th>
-                <th className="px-6 py-4 text-right text-xs font-black text-zinc-500 uppercase tracking-wider">Acciones</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Nombre</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Descripción</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Tipo de Precio</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Precio</th>
+                <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-zinc-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-zinc-100">
               {paginatedFinishes.map((finish) => (
                 <tr key={finish.id} className="hover:bg-zinc-50/50 transition-colors group">
-                  <td className="px-6 py-4 whitespace-nowrap"><div className="font-black text-gray-900">{finish.name}</div></td>
+                  <td className="px-6 py-4 whitespace-nowrap"><div className="font-bold text-gray-900">{finish.name}</div></td>
                   <td className="px-6 py-4"><div className="text-sm text-zinc-600 max-w-xs truncate">{finish.description || '—'}</div></td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={clsx(
@@ -267,7 +263,7 @@ export default function Finishes() {
                       {getPriceTypeLabel(finish.price_type)}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap"><div className="text-lg font-black text-zinc-800">{getPriceDisplay(finish)}</div></td>
+                  <td className="px-6 py-4 whitespace-nowrap"><div className="text-lg font-bold text-zinc-800">{getPriceDisplay(finish)}</div></td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <button
                       onClick={() => handleToggleActive(finish)}
@@ -333,7 +329,7 @@ export default function Finishes() {
             <div key={finish.id} className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 md:p-6 hover:shadow-md transition-all group flex flex-col">
               <div className="flex items-start justify-between mb-4">
                 <div className="w-12 h-12 bg-zinc-800 rounded-xl flex items-center justify-center shadow-sm shrink-0">
-                  <span className="text-xl text-white">🎨</span>
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 16h6 0 11-8 0 4 4 0 018 0z" /></svg>
                 </div>
                 <button
                   onClick={() => handleToggleActive(finish)}
@@ -343,7 +339,7 @@ export default function Finishes() {
                   <span className={clsx("inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow-md", finish.is_active ? "translate-x-6" : "translate-x-1")} />
                 </button>
               </div>
-              <h3 className="font-black text-lg text-gray-900 truncate mb-1">{finish.name}</h3>
+              <h3 className="font-bold text-lg text-gray-900 truncate mb-1">{finish.name}</h3>
               <p className="text-sm text-zinc-600 line-clamp-2 mb-4 h-10">{finish.description || 'Sin descripción'}</p>
               <div className="mt-auto space-y-3">
                 <div className="flex justify-between items-center bg-zinc-50 p-3 rounded-xl border border-zinc-100">
@@ -355,12 +351,12 @@ export default function Finishes() {
                   )}>
                     {getPriceTypeLabel(finish.price_type)}
                   </span>
-                  <span className="text-lg font-black text-zinc-800">{getPriceDisplay(finish)}</span>
+                  <span className="text-lg font-bold text-zinc-800">{getPriceDisplay(finish)}</span>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => handleEdit(finish)} className="flex-1 px-4 py-2 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors text-sm">✏️ Editar</button>
+                  <button onClick={() => handleEdit(finish)} className="flex-1 px-4 py-2 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 transition-colors text-sm">Editar</button>
                   {finish.is_active && (
-                    <button onClick={() => handleDelete(finish.id)} disabled={isDeleting} className="px-4 py-2 bg-white border border-red-200 text-red-500 hover:bg-red-50 rounded-xl font-bold shadow-sm transition-colors disabled:opacity-50 text-sm">🗑️</button>
+                    <button onClick={() => handleDelete(finish.id)} disabled={isDeleting} className="px-4 py-2 bg-white border border-red-200 text-red-500 hover:bg-red-50 rounded-xl font-bold shadow-sm transition-colors disabled:opacity-50 text-sm">Eliminar</button>
                   )}
                 </div>
               </div>
@@ -370,7 +366,7 @@ export default function Finishes() {
       )}
 
       {viewMode === 'grid' && filteredFinishes.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredFinishes.length)} de {filteredFinishes.length} resultados
           </span>
@@ -395,20 +391,17 @@ export default function Finishes() {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={() => { setShowModal(false); resetForm(); }} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-fuchsia-100 to-pink-100 flex items-center justify-center border border-fuchsia-200/50 shadow-inner">
-                  <span className="text-2xl">✨</span>
-                </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     {editingFinish ? 'Editar Terminación' : 'Nueva Terminación'}
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">

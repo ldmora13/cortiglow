@@ -91,18 +91,16 @@ export default function Inventory() {
   const paginatedInventory = filteredInventory.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
-                Inventario
-              </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
-                {inventory.length} productos en stock
-              </p>
-            </div>
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
+            Inventario
+          </h1>
+          <p className="text-sm font-medium text-zinc-500">
+            {inventory.length} productos en stock
+          </p>
+        </div>
             
             <div className="flex flex-wrap items-center gap-3">
 
@@ -116,14 +114,14 @@ export default function Inventory() {
               
               <Link
                 to="/inventory/movements"
-                className="inline-flex items-center justify-center px-4 py-2.5 bg-zinc-900 text-white rounded-xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-sm"
+                className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
               >
-                <History className="w-5 h-5 mr-2" />
+                <History className="w-4 h-4 mr-2" />
                 Ver Movimientos
               </Link>
             </div>
-          </div>
-          <div className="mt-6">
+      </div>
+          <div className="mt-4">
             <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-4 sm:p-5 relative group flex flex-col sm:flex-row items-center gap-4">
               <div className="flex-1 relative flex items-center w-full">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
@@ -175,12 +173,10 @@ export default function Inventory() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
       </div>
 
       {filteredInventory.length === 0 ? (
-        <div className="py-12 text-center bg-white rounded-3xl border border-zinc-200 border-dashed shadow-sm">
+        <div className="py-12 text-center bg-white rounded-2xl border border-zinc-200 border-dashed shadow-sm">
           <Search className="w-12 h-12 text-zinc-300 mx-auto mb-3" />
           <p className="text-zinc-500 font-medium">No se encontraron productos en inventario.</p>
         </div>
@@ -198,7 +194,7 @@ export default function Inventory() {
                 </div>
               )}
               <div className="p-4 md:p-5 flex flex-col flex-1">
-                <h3 className="font-black text-lg text-gray-900 mb-1 truncate group-hover:text-zinc-600 transition-colors">{item.product.name}</h3>
+                <h3 className="font-bold text-lg text-gray-900 mb-1 truncate group-hover:text-zinc-600 transition-colors">{item.product.name}</h3>
                 {item.product.sku && <p className="text-xs font-bold text-amber-600 mb-2">{item.product.sku}</p>}
                 <div className="flex flex-col gap-2 mb-4">
                   {item.product.category ? (
@@ -218,7 +214,7 @@ export default function Inventory() {
                     </span>
                   )}
                 </div>
-                <p className="text-xl font-black text-zinc-800 mb-4">{formatCOP(item.product.price)}</p>
+                <p className="text-xl font-bold text-zinc-800 mb-4">{formatCOP(item.product.price)}</p>
                 <div className="space-y-3 mb-4 mt-auto">
                   <div className="flex justify-between items-center bg-white border border-zinc-200 rounded-xl px-4 py-3">
                     <span className="text-sm font-bold text-zinc-700">Stock:</span>
@@ -239,16 +235,16 @@ export default function Inventory() {
           ))}
         </div>
       ) : (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
           <div className="hidden md:block overflow-x-auto">
             <table className="min-w-full divide-y divide-zinc-200">
               <thead className="bg-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Producto</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Categoría</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Precio</th>
-                  <th className="px-6 py-4 text-center text-xs font-black text-zinc-500 uppercase tracking-wider">Stock</th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-zinc-500 uppercase tracking-wider">Acciones</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Producto</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Categoría</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Precio</th>
+                  <th className="px-6 py-4 text-center text-xs font-bold text-zinc-500 uppercase tracking-wider">Stock</th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-zinc-500 uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-zinc-100">
@@ -284,7 +280,7 @@ export default function Inventory() {
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-zinc-900">{formatCOP(item.product.price)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-zinc-900">{formatCOP(item.product.price)}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-center"><div className="flex justify-center"><StockBadge quantity={item.quantity} minStock={item.min_stock} /></div></td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex justify-end gap-2">
@@ -317,7 +313,7 @@ export default function Inventory() {
                       <StockBadge quantity={item.quantity} minStock={item.min_stock} />
                       {item.location && <span className="text-xs text-zinc-600 font-bold bg-zinc-100 border border-zinc-200 px-2 py-0.5 rounded-md flex items-center gap-1"><MapPin className="w-3 h-3" />{item.location}</span>}
                     </div>
-                    <p className="text-sm font-black text-zinc-900 mt-2">{formatCOP(item.product.price)}</p>
+                    <p className="text-sm font-bold text-zinc-900 mt-2">{formatCOP(item.product.price)}</p>
                     <button onClick={() => { setSelectedItem(item); setIsModalOpen(true); }} className="mt-3 w-full px-3 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl font-bold shadow-sm transition-all active:scale-95 flex justify-center items-center gap-1.5">
                       <Edit3 className="w-4 h-4" /> Ajustar Stock
                     </button>
@@ -354,20 +350,17 @@ export default function Inventory() {
 
       {isModalOpen && selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={() => setIsModalOpen(false)} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center border border-amber-200/50 shadow-inner">
-                  <span className="text-2xl">📦</span>
-                </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     Ajustar Stock
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">

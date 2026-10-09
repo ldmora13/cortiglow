@@ -8,20 +8,20 @@ import clsx from 'clsx';
 import type { OrderStatus } from '../types/order.types';
 
 const statusConfig: Record<string, any> = {
-  pending: { icon: '⏳', color: 'yellow', label: 'Pendiente', bgClass: 'bg-yellow-50', borderClass: 'border-zinc-300' },
+  pending: { icon: '', color: 'yellow', label: 'Pendiente', bgClass: 'bg-yellow-50', borderClass: 'border-zinc-300' },
   confirmed: { icon: '✓', color: 'blue', label: 'Confirmada', bgClass: 'bg-gray-50', borderClass: 'border-zinc-300' },
-  in_progress: { icon: '🚀', color: 'blue', label: 'En Progreso', bgClass: 'bg-white', borderClass: 'border-zinc-300' },
-  completed: { icon: '✅', color: 'green', label: 'Completada', bgClass: 'bg-green-50', borderClass: 'border-zinc-300' },
-  cancelled: { icon: '❌', color: 'red', label: 'Cancelada', bgClass: 'bg-red-50', borderClass: 'border-red-300' }
+  in_progress: { icon: '', color: 'blue', label: 'En Progreso', bgClass: 'bg-white', borderClass: 'border-zinc-300' },
+  completed: { icon: '', color: 'green', label: 'Completada', bgClass: 'bg-green-50', borderClass: 'border-zinc-300' },
+  cancelled: { icon: '', color: 'red', label: 'Cancelada', bgClass: 'bg-red-50', borderClass: 'border-red-300' }
 };
 
 const paymentMethodIcons: Record<string, string> = {
-  efectivo: '💵 Efectivo',
-  nequi: '📱 Nequi',
-  daviplata: '💰 Daviplata',
-  pse: '🏦 PSE',
-  transferencia: '💸 Transferencia',
-  tarjeta: '💳 Tarjeta'
+  efectivo: 'Efectivo',
+  nequi: 'Nequi',
+  daviplata: 'Daviplata',
+  pse: 'PSE',
+  transferencia: 'Transferencia',
+  tarjeta: 'Tarjeta'
 };
 
 export default function OrderDetail() {
@@ -76,7 +76,7 @@ export default function OrderDetail() {
   if (isError || !order) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">❌</div>
+        <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg></div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Orden no encontrada</h2>
         <Link to="/orders" className="text-amber-500 hover:text-zinc-800 font-medium">
           ← Volver a órdenes
@@ -105,7 +105,7 @@ export default function OrderDetail() {
           </div>
         </div>
         <button onClick={handlePrint} className="hidden md:flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition-all font-medium">
-          🖨️ Imprimir
+          Imprimir
         </button>
       </div>
 
@@ -113,7 +113,7 @@ export default function OrderDetail() {
         <div className="p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="text-5xl">{config.icon}</div>
+              
               <div>
                 <p className="text-sm text-zinc-600 font-medium">Estado de la orden</p>
                 <p className="text-2xl font-bold text-gray-900">{config.label}</p>
@@ -129,7 +129,7 @@ export default function OrderDetail() {
               )}
               {order.status === 'confirmed' && (
                 <>
-                  <button onClick={() => handleChangeStatus('in_progress')} disabled={isUpdating} className="px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 font-medium disabled:opacity-50">🚀 En Progreso</button>
+                  <button onClick={() => handleChangeStatus('in_progress')} disabled={isUpdating} className="px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 font-medium disabled:opacity-50">En progreso</button>
                   <button onClick={() => handleChangeStatus('completed')} disabled={isUpdating} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50">Completar</button>
                 </>
               )}
@@ -137,7 +137,7 @@ export default function OrderDetail() {
                 <button onClick={() => handleChangeStatus('completed')} disabled={isUpdating} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50">Completar</button>
               )}
               {order.status !== 'cancelled' && order.status !== 'completed' && (
-                <button onClick={() => handleChangeStatus('cancelled')} disabled={isUpdating} className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-medium disabled:opacity-50">❌ Cancelar</button>
+                <button onClick={() => handleChangeStatus('cancelled')} disabled={isUpdating} className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-medium disabled:opacity-50">Cancelar</button>
               )}
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function OrderDetail() {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             <div className="bg-white border-b border-zinc-200 p-6">
-              <h2 className="text-xl font-bold text-gray-900">🛒 Productos ({order.items?.length || 0})</h2>
+              <h2 className="text-xl font-bold text-gray-900">Productos ({order.items?.length || 0})</h2>
             </div>
             <div className="divide-y divide-gray-100">
               {order.items?.map((item: any) => (
@@ -183,7 +183,7 @@ export default function OrderDetail() {
 
         <div className="space-y-6">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">👤 Cliente</h3>
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">Cliente</h3>
             <div className="space-y-3">
               <div><p className="text-sm text-zinc-600">Nombre</p><p className="font-semibold text-gray-900">{order.customer?.name}</p></div>
               <div><p className="text-sm text-zinc-600">Teléfono</p><a href={`tel:${order.customer?.phone}`} className="font-semibold text-amber-500">{order.customer?.phone}</a></div>
@@ -193,10 +193,10 @@ export default function OrderDetail() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">💳 Información de Pago</h3>
+            <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">Información de Pago</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between"><span className="text-zinc-600">Método</span><span className="font-semibold">{paymentMethodIcons[order.payment_method] || order.payment_method}</span></div>
-              <div className="flex items-center justify-between"><span className="text-zinc-600">Estado</span><span className={clsx("px-3 py-1 rounded-lg font-semibold text-sm", order.payment_status === 'paid' ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")}>{order.payment_status === 'paid' ? 'Pagado' : '⏳ Pendiente'}</span></div>
+              <div className="flex items-center justify-between"><span className="text-zinc-600">Estado</span><span className={clsx("px-3 py-1 rounded-lg font-semibold text-sm", order.payment_status === 'paid' ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")}>{order.payment_status === 'paid' ? 'Pagado' : 'Pendiente'}</span></div>
             </div>
           </div>
 

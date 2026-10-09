@@ -118,31 +118,27 @@ export default function Providers() {
   const paginatedProviders = filteredProviders.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
       {/* Header */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-200 text-zinc-900 shadow-sm relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
                 <Truck className="w-8 h-8 text-amber-500" />
                 Proveedores
               </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
+              <p className="text-sm font-medium text-zinc-500">
                 {providers.length} proveedores registrados
               </p>
             </div>
             <button
               onClick={() => openModal()}
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-md min-h-[44px]"
+              className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nuevo Proveedor
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Barra de Búsqueda Unificada */}
@@ -203,11 +199,11 @@ export default function Providers() {
       </div>
 
       {filteredProviders.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center shadow-sm border border-zinc-200">
+        <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-zinc-200">
           <div className="w-24 h-24 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
             <Truck className="w-12 h-12 text-zinc-400" />
           </div>
-          <h3 className="text-2xl font-black text-zinc-800 mb-3">No hay proveedores</h3>
+          <h3 className="text-lg font-bold text-zinc-900 mb-2">No hay proveedores</h3>
           <p className="text-zinc-500 text-lg mb-8 max-w-md mx-auto">
             {searchTerm ? 'No encontramos proveedores que coincidan con tu búsqueda.' : 'Aún no has registrado ningún proveedor en el sistema.'}
           </p>
@@ -216,20 +212,20 @@ export default function Providers() {
               onClick={() => openModal()}
               className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 transition-all shadow-md active:scale-95"
             >
-              ➕ Añadir Primer Proveedor
+              Añadir Primer Proveedor
             </button>
           )}
         </div>
       ) : viewMode === 'list' ? (
-        <div className="bg-white rounded-3xl border border-zinc-200 overflow-hidden shadow-sm">
+        <div className="bg-white rounded-2xl border border-zinc-200 overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-zinc-50/50 border-b border-zinc-200">
-                  <th className="p-5 font-black text-xs uppercase tracking-wider text-zinc-500 w-1/4">Empresa</th>
-                  <th className="p-5 font-black text-xs uppercase tracking-wider text-zinc-500">Contacto</th>
-                  <th className="p-5 font-black text-xs uppercase tracking-wider text-zinc-500">Ubicación / T. Entrega</th>
-                  <th className="p-5 font-black text-xs uppercase tracking-wider text-zinc-500 text-right">Acciones</th>
+                  <th className="p-5 font-bold text-xs uppercase tracking-wider text-zinc-500 w-1/4">Empresa</th>
+                  <th className="p-5 font-bold text-xs uppercase tracking-wider text-zinc-500">Contacto</th>
+                  <th className="p-5 font-bold text-xs uppercase tracking-wider text-zinc-500">Ubicación / T. Entrega</th>
+                  <th className="p-5 font-bold text-xs uppercase tracking-wider text-zinc-500 text-right">Acciones</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-zinc-100">
@@ -323,19 +319,19 @@ export default function Providers() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {paginatedProviders.map(provider => (
-            <div key={provider.id} className="bg-white rounded-3xl p-6 border border-zinc-200 hover:border-amber-300 hover:shadow-xl hover:shadow-amber-900/5 transition-all group relative overflow-hidden">
+            <div key={provider.id} className="bg-white rounded-2xl p-6 border border-zinc-200 hover:border-amber-300 hover:shadow-xl hover:shadow-amber-900/5 transition-all group relative overflow-hidden">
               <div className="absolute top-4 right-4 flex gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 backdrop-blur-sm p-1 rounded-xl shadow-sm border border-zinc-100">
                 <button onClick={() => openModal(provider)} className="p-1.5 text-zinc-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg></button>
                 <button onClick={() => handleDelete(provider.id, provider.name)} className="p-1.5 text-zinc-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
               </div>
 
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center mb-5 border border-amber-200/50 shadow-inner">
-                <span className="font-black text-xl text-amber-700">
+                <span className="font-bold text-xl text-amber-700">
                   {provider.name.charAt(0).toUpperCase()}
                 </span>
               </div>
               
-              <h3 className="font-black text-lg text-zinc-900 mb-1 leading-tight pr-12 line-clamp-2" title={provider.name}>
+              <h3 className="font-bold text-lg text-zinc-900 mb-1 leading-tight pr-12 line-clamp-2" title={provider.name}>
                 {provider.name}
               </h3>
               
@@ -367,7 +363,7 @@ export default function Providers() {
       )}
 
       {viewMode === 'grid' && filteredProviders.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredProviders.length)} de {filteredProviders.length} resultados
           </span>
@@ -393,10 +389,10 @@ export default function Providers() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={() => setIsModalOpen(false)} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
@@ -406,7 +402,7 @@ export default function Providers() {
                   <Truck className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     {editingProvider ? 'Editar Proveedor' : 'Nuevo Proveedor'}
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">

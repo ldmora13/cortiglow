@@ -95,7 +95,7 @@ export default function OrderForm() {
                 <h1 className="text-lg md:text-2xl font-bold truncate">Nueva Venta</h1>
                 {selectedCustomer && (
                   <p className="text-xs md:text-sm text-zinc-500 truncate">
-                    👤 {selectedCustomer.name}
+                    {selectedCustomer.name}
                   </p>
                 )}
               </div>
@@ -114,9 +114,9 @@ export default function OrderForm() {
         <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
           <div className="flex items-center justify-between">
             {[
-              { num: 1, label: 'Cliente', icon: '👤', color: 'blue' },
-              { num: 2, label: 'Productos', icon: '🛒', color: 'blue' },
-              { num: 3, label: 'Pago', icon: '💳', color: 'green' }
+              { num: 1, label: 'Cliente', color: 'blue' },
+              { num: 2, label: 'Productos', color: 'blue' },
+              { num: 3, label: 'Pago', color: 'green' }
             ].map((s, idx) => (
               <div key={s.num} className="flex-1 flex items-center">
                 <div className="flex flex-col items-center flex-1">
@@ -126,7 +126,7 @@ export default function OrderForm() {
                       ? `bg-zinc-900 text-white shadow-md scale-110` 
                       : "bg-gray-100 text-gray-400 scale-100"
                   )}>
-                    {step > s.num ? <span className="animate-pulse">✓</span> : s.icon}
+                    {step > s.num ? <span className="animate-pulse">✓</span> : <span>{s.num}</span>}
                   </div>
                   <span className={clsx(
                     "text-xs md:text-sm mt-2 font-semibold transition-all duration-300",

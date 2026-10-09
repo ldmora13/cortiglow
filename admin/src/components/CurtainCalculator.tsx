@@ -111,20 +111,17 @@ export default function CurtainCalculator({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col my-4 sm:my-8 max-h-[95vh] sm:max-h-[90vh] border border-zinc-200">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col my-4 sm:my-8 max-h-[95vh] sm:max-h-[90vh] border border-zinc-200">
         {/* Header Modal */}
-        <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20 flex-shrink-0">
-          <div className="absolute top-6 right-6">
+        <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20 flex-shrink-0">
+          <div className="absolute top-4 right-4">
             <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center border border-emerald-200/50 shadow-inner">
-              <span className="text-2xl">📏</span>
-            </div>
             <div className="flex-1 min-w-0 pr-8">
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight truncate">
+              <h2 className="text-base font-bold tracking-tight text-zinc-900 truncate">
                 Configurar Cortina
               </h2>
               <p className="text-sm font-medium text-zinc-500 mt-0.5 truncate">
@@ -173,7 +170,7 @@ export default function CurtainCalculator({
           {squareMeters > 0 && (
             <div className="bg-white border border-zinc-200 rounded-2xl p-4 border border-zinc-200">
               <p className="text-sm font-semibold text-zinc-600 mb-1">Área Total</p>
-              <p className="text-3xl font-black text-zinc-700">
+              <p className="text-3xl font-bold text-zinc-700">
                 {squareMeters.toFixed(2)} m²
               </p>
             </div>
@@ -221,8 +218,7 @@ export default function CurtainCalculator({
           {/* Cálculo en Tiempo Real */}
           {squareMeters > 0 && (
             <div className="bg-white border border-zinc-200 rounded-2xl p-6 space-y-3 border border-zinc-200">
-              <h3 className="font-black text-gray-900 mb-4 flex items-center gap-2">
-                <span className="text-xl">💰</span>
+              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <span>Desglose de Costos</span>
               </h3>
               
@@ -245,8 +241,8 @@ export default function CurtainCalculator({
                 
                 <div className="border-t-2 border-zinc-200 pt-3 mt-3">
                   <div className="flex justify-between items-center">
-                    <span className="text-lg font-black text-gray-900">TOTAL:</span>
-                    <span className="text-3xl font-black text-zinc-800">
+                    <span className="text-lg font-bold text-gray-900">TOTAL:</span>
+                    <span className="text-3xl font-bold text-zinc-800">
                       {formatCOP(subtotal)}
                     </span>
                   </div>

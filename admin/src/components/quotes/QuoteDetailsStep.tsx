@@ -28,7 +28,7 @@ export const QuoteDetailsStep: React.FC<QuoteDetailsStepProps> = ({
 }) => {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-4 sm:p-6 space-y-4 sm:space-y-6">
-      <h2 className="text-lg sm:text-xl font-black text-gray-900">Detalles Finales</h2>
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900">Detalles Finales</h2>
 
       {/* Cliente Seleccionado */}
       <div className="p-4 bg-white rounded-xl border border-zinc-200">

@@ -36,20 +36,17 @@ export default function QuickCustomerModal({ isOpen, onClose, onSuccess }: Quick
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={(e) => e.stopPropagation()}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={(e) => e.stopPropagation()}>
         {/* Header Modal */}
-        <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-          <div className="absolute top-6 right-6">
+        <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+          <div className="absolute top-4 right-4">
             <button onClick={onClose} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center border border-blue-200/50 shadow-inner">
-              <span className="text-2xl">⚡</span>
-            </div>
             <div>
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+              <h2 className="text-base font-bold tracking-tight text-zinc-900">
                 Crear Cliente Rápido
               </h2>
               <p className="text-sm font-medium text-zinc-500 mt-0.5">

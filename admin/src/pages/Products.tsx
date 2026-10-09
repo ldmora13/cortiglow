@@ -10,6 +10,9 @@ export default function Products() {
   const { products, categories, isLoadingProducts, deleteProduct } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
+  const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [bulkDeleting, setBulkDeleting] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
@@ -30,6 +33,41 @@ export default function Products() {
       notify.error('Error al eliminar el producto');
     }
   };
+
+  const handleBulkDelete = async () => {
+    const items = products.filter(p => selectedIds.includes(p.id));
+    if (items.length === 0) return;
+    const confirmed = await notify.confirm({
+      title: `Eliminar ${items.length} producto${items.length > 1 ? 's' : ''}`,
+      message: 'Esta acción no se puede deshacer.',
+      confirmText: 'Eliminar',
+      type: 'danger'
+    });
+
+    if (!confirmed) return;
+
+    setBulkDeleting(true);
+    try {
+      await Promise.all(items.map(p => deleteProduct(p.id)));
+      notify.success(`${items.length} producto${items.length > 1 ? 's eliminados' : ' eliminado'}`);
+      setSelectedIds([]);
+    } catch (error) {
+      notify.error('No se pudieron eliminar todos los productos');
+    } finally {
+      setBulkDeleting(false);
+    }
+  };
+
+  const toggleSelect = (id: string) =>
+    setSelectedIds(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
+
+  const toggleSelectPage = () => {
+    const pageIds = paginatedProducts.map(p => p.id);
+    const allSelected = pageIds.every(id => selectedIds.includes(id));
+    setSelectedIds(prev => allSelected ? prev.filter(id => !pageIds.includes(id)) : [...new Set([...prev, ...pageIds])]);
+  };
+
+  const cell = density === 'compact' ? 'px-4 py-2' : 'px-6 py-4';
 
   const filteredProducts = products.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -54,28 +92,24 @@ export default function Products() {
   return (
     <div className="space-y-6 pb-20 md:pb-6">
       {/* Header */}
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
-                Productos
-              </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
-                {products.length} productos en nuestro catálogo
-              </p>
-            </div>
-            <Link
-              to="/products/new"
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-sm min-h-[44px]"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-              </svg>
-              Nuevo Producto
-            </Link>
-          </div>
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
+            Productos
+          </h1>
+          <p className="text-sm font-medium text-zinc-500">
+            {products.length} productos en catálogo
+          </p>
         </div>
+        <Link
+          to="/products/new"
+          className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
+        >
+          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+          Nuevo Producto
+        </Link>
       </div>
 
       {/* Barra de Búsqueda y Filtros Unificada */}
@@ -119,6 +153,7 @@ export default function Products() {
           <div className="bg-zinc-100 p-1.5 rounded-xl flex items-center shadow-inner border border-zinc-200/60 shrink-0">
             <button 
               onClick={() => setViewMode('grid')}
+              aria-label="Vista de cuadrícula"
               className={`p-2 rounded-lg transition-all flex items-center justify-center ${viewMode === 'grid' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200/50'}`}
               title="Vista de Cuadrícula"
             >
@@ -126,14 +161,47 @@ export default function Products() {
             </button>
             <button 
               onClick={() => setViewMode('list')}
+              aria-label="Vista de lista"
               className={`p-2 rounded-lg transition-all flex items-center justify-center ${viewMode === 'list' ? 'bg-white shadow-sm text-zinc-900' : 'text-zinc-500 hover:text-zinc-700 hover:bg-zinc-200/50'}`}
               title="Vista de Lista"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
             </button>
           </div>
+          {viewMode === 'list' && (
+            <button
+              onClick={() => setDensity(d => d === 'compact' ? 'comfortable' : 'compact')}
+              aria-pressed={density === 'compact'}
+              title={density === 'compact' ? 'Vista cómoda' : 'Vista densa'}
+              className="px-3 py-2 min-h-[44px] rounded-xl border border-zinc-200 bg-white text-xs font-bold text-zinc-600 hover:border-zinc-400 hover:text-zinc-900 transition-colors shrink-0"
+            >
+              {density === 'compact' ? 'Cómodo' : 'Denso'}
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Bulk bar */}
+      {viewMode === 'list' && selectedIds.length > 0 && (
+        <div className="bg-zinc-900 text-white rounded-2xl px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4" role="status">
+          <span className="text-sm font-semibold">{selectedIds.length} seleccionado{selectedIds.length > 1 ? 's' : ''}</span>
+          <span className="flex gap-2 sm:ml-auto">
+            <button
+              onClick={handleBulkDelete}
+              disabled={bulkDeleting}
+              className="px-3.5 py-2 min-h-[40px] rounded-lg bg-red-600 text-white text-sm font-bold hover:bg-red-500 disabled:opacity-60 transition-colors"
+            >
+              {bulkDeleting ? 'Eliminando…' : 'Eliminar'}
+            </button>
+            <button
+              onClick={() => setSelectedIds([])}
+              className="px-3.5 py-2 min-h-[40px] rounded-lg bg-white/10 text-white text-sm font-bold hover:bg-white/20 transition-colors"
+            >
+              Limpiar
+            </button>
+          </span>
+        </div>
+      )}
 
       {/* Products Display */}
       {filteredProducts.length === 0 ? (
@@ -170,7 +238,7 @@ export default function Products() {
               </div>
 
               <div className="p-4 md:p-5 flex flex-col flex-1">
-                <h3 className="font-black text-base md:text-lg text-gray-900 mb-1 line-clamp-1 group-hover:text-zinc-600 transition-colors" title={product.name}>
+                <h3 className="font-bold text-base md:text-lg text-gray-900 mb-1 line-clamp-1 group-hover:text-zinc-600 transition-colors" title={product.name}>
                   {product.name}
                 </h3>
                 {product.sku && (
@@ -203,7 +271,7 @@ export default function Products() {
 
                 <div className="mt-auto pt-3 border-t border-zinc-100">
                   <div className="flex items-center justify-between">
-                    <span className="text-lg md:text-xl font-black text-zinc-900 bg-zinc-100 px-3 py-1 rounded-lg">
+                    <span className="text-lg md:text-xl font-bold text-zinc-900 bg-zinc-100 px-3 py-1 rounded-lg">
                       {formatCOP(product.price)}
                     </span>
                     <div className="flex gap-2">
@@ -238,17 +306,35 @@ export default function Products() {
             <table className="min-w-full divide-y divide-zinc-200">
               <thead className="bg-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Producto</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">SKU</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Categoría</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Precio</th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-zinc-500 uppercase tracking-wider">Acciones</th>
+                  <th className={`${cell} w-10`}>
+                    <input
+                      type="checkbox"
+                      aria-label="Seleccionar página"
+                      checked={paginatedProducts.length > 0 && paginatedProducts.every(p => selectedIds.includes(p.id))}
+                      onChange={toggleSelectPage}
+                      className="w-4 h-4 rounded border-zinc-300 accent-zinc-900 cursor-pointer"
+                    />
+                  </th>
+                  <th className={`${cell} text-left text-xs font-bold text-zinc-500 uppercase tracking-wider`}>Producto</th>
+                  <th className={`${cell} text-left text-xs font-bold text-zinc-500 uppercase tracking-wider`}>SKU</th>
+                  <th className={`${cell} text-left text-xs font-bold text-zinc-500 uppercase tracking-wider`}>Categoría</th>
+                  <th className={`${cell} text-left text-xs font-bold text-zinc-500 uppercase tracking-wider`}>Precio</th>
+                  <th className={`${cell} text-right text-xs font-bold text-zinc-500 uppercase tracking-wider`}>Acciones</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-zinc-100">
                 {paginatedProducts.map((product) => (
                   <tr key={product.id} className="hover:bg-zinc-50/50 transition-colors group">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className={`${cell} whitespace-nowrap w-10`}>
+                      <input
+                        type="checkbox"
+                        aria-label={`Seleccionar ${product.name}`}
+                        checked={selectedIds.includes(product.id)}
+                        onChange={() => toggleSelect(product.id)}
+                        className="w-4 h-4 rounded border-zinc-300 accent-zinc-900 cursor-pointer"
+                      />
+                    </td>
+                    <td className={`${cell} whitespace-nowrap`}>
                       <div className="flex items-center">
                         <div className="h-12 w-12 flex-shrink-0 bg-white rounded-lg border border-zinc-100 overflow-hidden">
                           <img
@@ -259,18 +345,18 @@ export default function Products() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-bold text-gray-900">{product.name}</div>
-                          {product.description && (
+                          {product.description && density === 'comfortable' && (
                             <div className="text-xs text-zinc-500 line-clamp-1 max-w-xs">{product.description}</div>
                           )}
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className={`${cell} whitespace-nowrap`}>
                       <span className="px-2 inline-flex text-xs leading-5 font-bold rounded-md bg-amber-100 text-amber-800">
                         {product.sku || '-'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className={`${cell} whitespace-nowrap`}>
                       {product.category ? (
                         <div className="flex flex-col gap-1 items-start">
                           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold bg-zinc-100 text-zinc-600">
@@ -288,10 +374,10 @@ export default function Products() {
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-black text-zinc-900">
+                    <td className={`${cell} whitespace-nowrap text-sm font-bold text-zinc-900`}>
                       {formatCOP(product.price)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className={`${cell} whitespace-nowrap text-right text-sm font-medium`}>
                       <div className="flex justify-end gap-2">
                         <Link
                           to={`/products/${product.id}`}
@@ -343,7 +429,7 @@ export default function Products() {
       )}
 
       {viewMode === 'grid' && filteredProducts.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredProducts.length)} de {filteredProducts.length} resultados
           </span>

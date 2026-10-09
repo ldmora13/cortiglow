@@ -28,7 +28,7 @@ export const QuoteCustomerStep: React.FC<QuoteCustomerStepProps> = ({
     <>
       <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-          <h2 className="text-lg sm:text-xl font-black text-gray-900">Selecciona el Cliente</h2>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-900">Selecciona el Cliente</h2>
           <button
             onClick={() => setShowCustomerModal(true)}
             className="w-full sm:w-auto px-4 py-2.5 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 active:scale-95 transition-all text-sm min-h-[44px]"
@@ -61,8 +61,8 @@ export const QuoteCustomerStep: React.FC<QuoteCustomerStepProps> = ({
               )}
             >
               <div className="font-bold text-gray-900 text-sm sm:text-base line-clamp-1">{customer.name}</div>
-              <div className="text-xs sm:text-sm text-zinc-600 mt-1">📱 {customer.phone}</div>
-              {customer.email && <div className="text-xs sm:text-sm text-zinc-600 truncate">📧 {customer.email}</div>}
+              <div className="text-xs sm:text-sm text-zinc-600 mt-1">{customer.phone}</div>
+              {customer.email && <div className="text-xs sm:text-sm text-zinc-600 truncate">{customer.email}</div>}
             </button>
           ))}
         </div>

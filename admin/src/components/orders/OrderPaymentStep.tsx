@@ -43,16 +43,16 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
       <div className="p-6 space-y-6">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-3">
-            💳 Método de Pago
+            Método de Pago
           </label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3" role="radiogroup" aria-label="Método de pago">
             {[
-              { id: 'efectivo', icon: '💵', label: 'Efectivo' },
-              { id: 'nequi', icon: '📱', label: 'Nequi' },
-              { id: 'daviplata', icon: '💰', label: 'Daviplata' },
-              { id: 'pse', icon: '🏦', label: 'PSE' },
-              { id: 'transferencia', icon: '💸', label: 'Transferencia' },
-              { id: 'tarjeta', icon: '💳', label: 'Tarjeta' }
+              { id: 'efectivo', icon: '', label: 'Efectivo' },
+              { id: 'nequi', icon: '', label: 'Nequi' },
+              { id: 'daviplata', icon: '', label: 'Daviplata' },
+              { id: 'pse', icon: '', label: 'PSE' },
+              { id: 'transferencia', icon: '', label: 'Transferencia' },
+              { id: 'tarjeta', icon: '', label: 'Tarjeta' }
             ].map(method => (
               <button
                 key={method.id}
@@ -169,7 +169,6 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
               </>
             ) : (
               <>
-                <span className="text-2xl">✅</span>
                 <span>Confirmar Venta</span>
               </>
             )}

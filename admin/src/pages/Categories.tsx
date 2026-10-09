@@ -129,30 +129,26 @@ export default function Categories() {
   }
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
       {/* Header Estándar */}
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
                 Categorías
               </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
+              <p className="text-sm font-medium text-zinc-500">
                 {categories.length} familias organizando nuestros productos
               </p>
             </div>
             <button
               onClick={() => handleOpenModal()}
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-sm min-h-[44px]"
+              className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nueva Categoría
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Barra de Búsqueda y Filtros Unificada */}
@@ -219,13 +215,13 @@ export default function Categories() {
 
       {/* Listado de Categorías */}
       {filteredCategories.length === 0 ? (
-        <div className="bg-white rounded-[2.5rem] p-16 text-center shadow-sm border border-zinc-100">
+        <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-zinc-100">
           <div className="w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
             <svg className="w-12 h-12 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
             </svg>
           </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-3 tracking-tight">
+          <h3 className="text-lg font-bold text-zinc-900 mb-2">
             {searchTerm ? 'No encontramos coincidencias' : 'Aún no hay categorías'}
           </h3>
           <p className="text-zinc-500 text-lg mb-8 max-w-md mx-auto font-medium">
@@ -234,7 +230,7 @@ export default function Categories() {
           {!searchTerm && (
             <button
               onClick={() => handleOpenModal()}
-              className="inline-flex items-center px-8 py-4 bg-zinc-900 text-white shadow-xl shadow-zinc-900/20 transition-all rounded-2xl font-black hover:bg-zinc-800 hover:-translate-y-1 active:scale-95"
+              className="inline-flex items-center px-8 py-4 bg-zinc-900 text-white shadow-xl shadow-zinc-900/20 transition-all rounded-2xl font-bold hover:bg-zinc-800 hover:-translate-y-1 active:scale-95"
             >
               Agregar la primera
             </button>
@@ -246,10 +242,10 @@ export default function Categories() {
             <table className="min-w-full divide-y divide-zinc-200">
               <thead className="bg-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Categoría</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Ruta</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Productos</th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-zinc-500 uppercase tracking-wider">Acciones</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Categoría</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Ruta</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Productos</th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-zinc-500 uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-zinc-100">
@@ -340,7 +336,7 @@ export default function Categories() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
           {paginatedCategories.map((category) => (
-            <div key={category.id} className="bg-white rounded-[2rem] shadow-sm border border-zinc-100 overflow-hidden hover:shadow-2xl hover:shadow-amber-500/10 hover:border-amber-200 hover:-translate-y-2 transition-all duration-500 group flex flex-col relative">
+            <div key={category.id} className="bg-white rounded-2xl shadow-sm border border-zinc-100 overflow-hidden hover:shadow-2xl hover:shadow-amber-500/10 hover:border-amber-200 hover:-translate-y-2 transition-all duration-500 group flex flex-col relative">
               
               {/* Category Image */}
               <div className="bg-zinc-100 relative overflow-hidden flex-shrink-0 h-56">
@@ -358,7 +354,7 @@ export default function Categories() {
                 )}
                 
                 <div className="absolute top-4 right-4">
-                  <div className="bg-amber-500 text-zinc-900 px-3.5 py-2 rounded-xl text-xs font-black shadow-lg shadow-amber-500/30 flex items-center gap-1.5">
+                  <div className="bg-amber-500 text-zinc-900 px-3.5 py-2 rounded-xl text-xs font-bold shadow-lg shadow-amber-500/30 flex items-center gap-1.5">
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" /></svg>
                     {category.product_count || 0} Prods
                   </div>
@@ -369,7 +365,7 @@ export default function Categories() {
               <div className="p-6 flex flex-col flex-1 relative">
                 <div className="flex flex-col">
                   <div className="flex justify-between items-start mb-2 gap-2">
-                    <h3 className="font-black text-2xl text-zinc-900 leading-tight group-hover:text-amber-600 transition-colors line-clamp-2">{category.name}</h3>
+                    <h3 className="font-bold text-2xl text-zinc-900 leading-tight group-hover:text-amber-600 transition-colors line-clamp-2">{category.name}</h3>
                   </div>
                   
                   <div className="flex flex-wrap items-center gap-2 mb-6">
@@ -425,7 +421,7 @@ export default function Categories() {
       )}
 
       {viewMode === 'grid' && sortedCategories.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, sortedCategories.length)} de {sortedCategories.length} resultados
           </span>
@@ -455,10 +451,10 @@ export default function Categories() {
             if (e.target === e.currentTarget) handleCloseModal();
           }}
         >
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200">
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={handleCloseModal} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
@@ -468,7 +464,7 @@ export default function Categories() {
                   <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
                 </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     {editingCategory ? 'Editar Categoría' : 'Nueva Categoría'}
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">
@@ -528,7 +524,7 @@ export default function Categories() {
                     }}
                     className={`p-4 rounded-xl border-2 text-left transition-all flex flex-col items-start ${!isSubcategoryMode ? 'border-emerald-500 bg-emerald-50 ring-4 ring-emerald-500/10 shadow-sm' : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50'}`}
                   >
-                    <div className="flex items-center gap-2 font-black mb-1">
+                    <div className="flex items-center gap-2 font-bold mb-1">
                       <svg className={`w-5 h-5 ${!isSubcategoryMode ? 'text-emerald-500' : 'text-zinc-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
                       <span className={!isSubcategoryMode ? 'text-emerald-900' : 'text-zinc-700'}>Principal</span>
                     </div>
@@ -540,7 +536,7 @@ export default function Categories() {
                     onClick={() => setIsSubcategoryMode(true)}
                     className={`p-4 rounded-xl border-2 text-left transition-all flex flex-col items-start ${isSubcategoryMode ? 'border-amber-500 bg-amber-50 ring-4 ring-amber-500/10 shadow-sm' : 'border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50'}`}
                   >
-                    <div className="flex items-center gap-2 font-black mb-1">
+                    <div className="flex items-center gap-2 font-bold mb-1">
                       <svg className={`w-5 h-5 ${isSubcategoryMode ? 'text-amber-500' : 'text-zinc-400'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                       <span className={isSubcategoryMode ? 'text-amber-900' : 'text-zinc-700'}>Subcategoría</span>
                     </div>

@@ -27,13 +27,17 @@ export const QuoteSummary: React.FC<QuoteSummaryProps> = ({
 }) => {
   return (
     <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm border border-zinc-200 p-4 sm:p-6 lg:sticky lg:top-6">
-      <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4">
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">
         Carrito ({cart.length})
       </h2>
 
       {cart.length === 0 ? (
         <div className="text-center py-8 sm:py-12 text-gray-500">
-          <div className="text-3xl sm:text-4xl mb-2">🛒</div>
+          <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-3" aria-hidden="true">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </div>
           <p className="text-xs sm:text-sm">No hay productos</p>
         </div>
       ) : (
@@ -100,8 +104,8 @@ export const QuoteSummary: React.FC<QuoteSummaryProps> = ({
         
         <div className="border-t-2 border-zinc-300 pt-3">
           <div className="flex justify-between items-center gap-2">
-            <span className="text-base sm:text-lg font-black text-gray-900">TOTAL:</span>
-            <span className="text-xl sm:text-2xl font-black text-zinc-800">
+            <span className="text-base sm:text-lg font-bold text-gray-900">TOTAL:</span>
+            <span className="text-xl sm:text-2xl font-bold text-zinc-800">
               {formatCOP(total)}
             </span>
           </div>

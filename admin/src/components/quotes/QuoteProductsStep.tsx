@@ -24,7 +24,7 @@ export const QuoteProductsStep: React.FC<QuoteProductsStepProps> = ({
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-4 sm:p-6">
-      <h2 className="text-lg sm:text-xl font-black text-gray-900 mb-4">Agregar Productos</h2>
+      <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4">Agregar Productos</h2>
       
       <input
         type="text"
@@ -55,14 +55,14 @@ export const QuoteProductsStep: React.FC<QuoteProductsStepProps> = ({
                   </span>
                 )}
               </div>
-              <div className="text-base sm:text-lg font-black text-zinc-600 mb-2">
+              <div className="text-base sm:text-lg font-bold text-zinc-600 mb-2">
                 {formatCOP(product.price)}{productType === 'custom_measure' && '/m²'}
               </div>
               <button
                 onClick={() => onAddProduct(product)}
                 className="w-full py-2.5 sm:py-2 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold hover:shadow-sm active:scale-95 transition-all text-sm min-h-[44px]"
               >
-                {productType === 'custom_measure' ? '📐 Configurar' : '➕ Agregar'}
+                {productType === 'custom_measure' ? '📐 Configurar' : 'Agregar'}
               </button>
             </div>
           );

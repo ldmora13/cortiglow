@@ -105,30 +105,26 @@ export default function Customers() {
   const paginatedCustomers = filteredCustomers.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
       {/* Header */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-zinc-200 text-zinc-900 shadow-sm relative overflow-hidden">
-        <div className="relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">
                 Clientes
               </h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">
+              <p className="text-sm font-medium text-zinc-500">
                 {customers.length} clientes registrados
               </p>
             </div>
             <button
               onClick={() => openModal()}
-              className="inline-flex items-center justify-center px-6 py-3.5 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 active:scale-95 transition-all shadow-md min-h-[44px]"
+              className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
             >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
               Nuevo Cliente
             </button>
-          </div>
-        </div>
       </div>
 
       {/* Barra de Búsqueda Unificada */}
@@ -189,11 +185,11 @@ export default function Customers() {
       </div>
 
       {filteredCustomers.length === 0 ? (
-        <div className="bg-white rounded-3xl p-16 text-center shadow-sm border border-zinc-200">
+        <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-zinc-200">
           <div className="w-24 h-24 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
-            <span className="text-4xl">👤</span>
+            <svg className="w-10 h-10 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
           </div>
-          <h3 className="text-2xl font-black text-zinc-800 mb-3">No hay clientes</h3>
+          <h3 className="text-lg font-bold text-zinc-900 mb-2">No hay clientes</h3>
           <p className="text-zinc-500 text-lg mb-8 max-w-md mx-auto">
             {searchTerm ? 'No encontramos clientes que coincidan con tu búsqueda.' : 'Aún no has registrado ningún cliente en el sistema.'}
           </p>
@@ -202,7 +198,7 @@ export default function Customers() {
               onClick={() => openModal()}
               className="inline-flex items-center gap-2 px-8 py-4 bg-zinc-900 text-white rounded-2xl font-bold hover:bg-zinc-800 transition-all shadow-md active:scale-95"
             >
-              ➕ Crear Primer Cliente
+              Crear Primer Cliente
             </button>
           )}
         </div>
@@ -212,10 +208,10 @@ export default function Customers() {
             <table className="min-w-full divide-y divide-zinc-200">
               <thead className="bg-white">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Cliente</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Contacto</th>
-                  <th className="px-6 py-4 text-left text-xs font-black text-zinc-500 uppercase tracking-wider">Ubicación</th>
-                  <th className="px-6 py-4 text-right text-xs font-black text-zinc-500 uppercase tracking-wider">Acciones</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Cliente</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Contacto</th>
+                  <th className="px-6 py-4 text-left text-xs font-bold text-zinc-500 uppercase tracking-wider">Ubicación</th>
+                  <th className="px-6 py-4 text-right text-xs font-bold text-zinc-500 uppercase tracking-wider">Acciones</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-zinc-100">
@@ -223,15 +219,13 @@ export default function Customers() {
                   <tr key={customer.id} className="hover:bg-zinc-50/50 transition-colors group">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-zinc-800 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0">
-                          👤
-                        </div>
+                        <div className="w-10 h-10 bg-zinc-800 rounded-xl flex items-center justify-center text-white shadow-sm shrink-0"><svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg></div>
                         <div className="font-bold text-zinc-900">{customer.name}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-zinc-900 flex items-center gap-1">📱 {customer.phone}</div>
-                      {customer.email && <div className="text-xs text-zinc-500 mt-1 flex items-center gap-1">📧 {customer.email}</div>}
+                      <div className="text-sm font-medium text-zinc-900 flex items-center gap-1">{customer.phone}</div>
+                      {customer.email && <div className="text-xs text-zinc-500 mt-1 flex items-center gap-1">{customer.email}</div>}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-zinc-900">{customer.city || '—'}</div>
@@ -290,12 +284,12 @@ export default function Customers() {
           <div key={customer.id} className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-5 md:p-6 hover:shadow-md hover:border-zinc-300 hover:-translate-y-1 transition-all duration-300 group flex flex-col">
             <div className="flex items-start gap-4 mb-4">
               <div className="w-14 h-14 bg-zinc-800 rounded-2xl flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform flex-shrink-0">
-                <span className="text-2xl text-white">👤</span>
+                <svg className="w-5 h-5 text-white"  stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="font-black text-lg text-gray-900 truncate group-hover:text-zinc-600 transition-colors">{customer.name}</h3>
+                <h3 className="font-bold text-lg text-gray-900 truncate group-hover:text-zinc-600 transition-colors">{customer.name}</h3>
                 <p className="text-sm font-semibold text-zinc-600 flex items-center gap-1 mt-1">
-                  📱 {customer.phone}
+                  {customer.phone}
                 </p>
               </div>
             </div>
@@ -303,13 +297,12 @@ export default function Customers() {
             <div className="space-y-2 mb-4">
               {customer.email && (
                 <p className="text-sm text-zinc-600 flex items-center gap-2 truncate">
-                  <span className="text-base">📧</span>
+                  <span className="text-base"></span>
                   <span className="truncate">{customer.email}</span>
                 </p>
               )}
               {customer.city && (
                 <p className="text-sm text-zinc-600 flex items-center gap-2">
-                  <span className="text-base">📍</span>
                   {customer.city}
                 </p>
               )}
@@ -320,7 +313,7 @@ export default function Customers() {
                 onClick={() => openModal(customer)}
                 className="flex-1 px-3 py-2.5 bg-zinc-900 text-white shadow-sm transition-all text-sm font-bold rounded-xl hover:bg-zinc-800 active:scale-95"
               >
-                ✏️ Editar
+                Editar
               </button>
               <button
                 onClick={() => handleDelete(customer.id, customer.name)}
@@ -337,7 +330,7 @@ export default function Customers() {
       )}
 
       {viewMode === 'grid' && filteredCustomers.length > 0 && (
-        <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-zinc-500 font-medium text-center sm:text-left">
             Mostrando {startIndex + 1} a {Math.min(startIndex + itemsPerPage, filteredCustomers.length)} de {filteredCustomers.length} resultados
           </span>
@@ -363,20 +356,17 @@ export default function Customers() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm">
-          <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] border border-zinc-200" onClick={e => e.stopPropagation()}>
             {/* Header Modal */}
-            <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-              <div className="absolute top-6 right-6">
+            <div className="relative p-5 pb-4 border-b border-zinc-100 bg-white z-20">
+              <div className="absolute top-4 right-4">
                 <button onClick={() => setIsModalOpen(false)} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center border border-blue-200/50 shadow-inner">
-                  <span className="text-2xl">{editingCustomer ? '✏️' : '➕'}</span>
-                </div>
                 <div>
-                  <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                  <h2 className="text-base font-bold tracking-tight text-zinc-900">
                     {editingCustomer ? 'Editar Cliente' : 'Nuevo Cliente'}
                   </h2>
                   <p className="text-sm font-medium text-zinc-500 mt-0.5">
@@ -390,7 +380,7 @@ export default function Customers() {
             <form onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto flex-1 custom-scrollbar">
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
-                  👤 Nombre Completo *
+                  Nombre Completo *
                 </label>
                 <input
                   required
@@ -410,7 +400,7 @@ export default function Customers() {
 
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
-                  📱 Teléfono *
+                  Teléfono *
                 </label>
                 <input
                   required
@@ -422,7 +412,7 @@ export default function Customers() {
 
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
-                  📧 Email
+                  Email
                 </label>
                 <input
                   type="email"
@@ -435,7 +425,7 @@ export default function Customers() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">
-                    📍 Ciudad
+                    Ciudad
                   </label>
                   <input
                     value={formData.city}
@@ -453,7 +443,7 @@ export default function Customers() {
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-gray-700 mb-2">
-                    🏠 Dirección
+                    Dirección
                   </label>
                   <input
                     value={formData.address}

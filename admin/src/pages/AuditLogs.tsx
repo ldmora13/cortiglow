@@ -190,7 +190,7 @@ export default function AuditLogs() {
         </div>
       </div>
 
-      <div className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-xl shadow-gray-200/20 rounded-[2rem] overflow-hidden">
+      <div className="bg-white/80 backdrop-blur-xl border border-gray-200/60 shadow-xl shadow-gray-200/20 rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50/50">

@@ -65,7 +65,7 @@ export default function Login() {
           {/* Compact brand  */}
           <div className="lg:hidden mb-6 md:mb-8 flex items-center gap-3 md:justify-center">
             <span className="bg-zinc-950 p-2.5 rounded-2xl shrink-0">
-              <img src="/logo.png" alt="CortiGlow" className="h-6 w-6 object-contain brightness-0 invert" />
+              <img src="/logo.png" alt="CortiGlow" className="h-8 w-8 object-contain brightness-0 invert" />
             </span>
             <span className="text-left md:text-center">
               <span className="block text-lg md:text-xl font-extrabold tracking-tight text-zinc-900 leading-none">CortiGlow</span>

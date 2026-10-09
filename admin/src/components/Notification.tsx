@@ -29,29 +29,33 @@ export default function Notification({
 
   const config = {
     success: {
-      icon: '✅',
-      gradient: 'from-green-500 to-emerald-500',
+      icon: '✓',
+      badge: 'bg-green-600',
+      bar: 'bg-green-500',
       bg: 'bg-green-50',
       border: 'border-green-200',
       text: 'text-green-800'
     },
     error: {
-      icon: '❌',
-      gradient: 'from-red-500 to-rose-500',
+      icon: '!',
+      badge: 'bg-red-600',
+      bar: 'bg-red-500',
       bg: 'bg-red-50',
       border: 'border-red-200',
       text: 'text-red-800'
     },
     warning: {
-      icon: '⚠️',
-      gradient: 'from-orange-500 to-amber-500',
+      icon: '!',
+      badge: 'bg-amber-600',
+      bar: 'bg-amber-500',
       bg: 'bg-orange-50',
       border: 'border-orange-200',
       text: 'text-orange-800'
     },
     info: {
-      icon: 'ℹ️',
-      gradient: 'from-blue-500 to-cyan-500',
+      icon: 'i',
+      badge: 'bg-zinc-700',
+      bar: 'bg-zinc-400',
       bg: 'bg-gray-50',
       border: 'border-zinc-200',
       text: 'text-blue-800'
@@ -71,10 +75,10 @@ export default function Notification({
     >
       {/* Icon */}
       <div className={clsx(
-        "flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br shadow-lg",
-        style.gradient
+        "flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-white text-sm font-bold",
+        style.badge
       )}>
-        <span className="text-xl">{style.icon}</span>
+        <span aria-hidden="true">{style.icon}</span>
       </div>
 
       {/* Message */}
@@ -102,7 +106,7 @@ export default function Notification({
       {duration > 0 && (
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/30 rounded-b-2xl overflow-hidden">
           <div
-            className={clsx("h-full bg-gradient-to-r", style.gradient)}
+            className={clsx("h-full", style.bar)}
             style={{
               animation: `progress ${duration}ms linear forwards`
             }}

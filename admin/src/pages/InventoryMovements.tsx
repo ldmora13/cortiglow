@@ -52,18 +52,17 @@ export default function InventoryMovements() {
   }
 
   return (
-    <div className="space-y-6 pb-20 md:pb-6">
+    <div className="space-y-5 pb-20 md:pb-6 w-full">
       {movements.length > 0 ? (
         <>
-          <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm p-6 md:p-8 text-zinc-900 relative overflow-hidden">
-        <div className="relative z-10">
+          <div>
           <Link to="/inventory" className="inline-flex items-center text-sm font-bold text-zinc-500 hover:text-zinc-900 mb-4 transition-colors">
             <ArrowLeft className="w-4 h-4 mr-1.5" /> Volver a Inventario
           </Link>
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
-              <h1 className="text-3xl md:text-4xl font-black mb-2 flex items-center gap-3">Historial de Movimientos</h1>
-              <p className="text-zinc-600 text-base md:text-lg font-medium">Registro de todas las entradas y salidas de stock</p>
+              <h1 className="text-xl md:text-2xl font-bold tracking-tight text-zinc-900">Historial de Movimientos</h1>
+              <p className="text-sm font-medium text-zinc-500">Registro de todas las entradas y salidas de stock</p>
             </div>
             
             <div className="flex bg-zinc-100 p-1 rounded-xl w-full md:w-auto">
@@ -79,7 +78,7 @@ export default function InventoryMovements() {
             </div>
           </div>
 
-          <div className="mt-6">
+          <div className="mt-4">
             <div className="bg-zinc-50 rounded-2xl border border-zinc-200 relative flex items-center transition-all focus-within:ring-2 focus-within:ring-zinc-900 focus-within:bg-white focus-within:border-transparent">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <Search className="h-5 w-5 text-zinc-400" />
@@ -104,10 +103,9 @@ export default function InventoryMovements() {
               )}
             </div>
           </div>
-        </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-sm border border-zinc-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
         {filteredMovements.length === 0 ? (
           <div className="py-16 text-center">
             <FileText className="w-12 h-12 text-zinc-300 mx-auto mb-3" />
@@ -155,7 +153,7 @@ export default function InventoryMovements() {
                           <span className="text-sm font-bold text-zinc-700">{movement.performed_by || 'Sistema'}</span>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right"><span className={`text-lg font-black ${movement.quantity > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{info.sign}{movement.quantity}</span></td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right"><span className={`text-lg font-bold ${movement.quantity > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>{info.sign}{movement.quantity}</span></td>
                       <td className="px-6 py-4"><span className="text-sm text-zinc-600 font-medium bg-zinc-50 px-3 py-1.5 rounded-lg border border-zinc-200 inline-block">{movement.reason}</span></td>
                     </tr>
                   );
@@ -191,13 +189,13 @@ export default function InventoryMovements() {
       </div>
       </>
       ) : (
-          <div className="bg-white rounded-[2.5rem] p-16 text-center shadow-sm border border-zinc-100">
+          <div className="bg-white rounded-2xl p-8 text-center shadow-sm border border-zinc-100">
             <div className="w-24 h-24 bg-amber-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
               <svg className="w-12 h-12 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-2xl font-black text-gray-900 mb-3 tracking-tight">Sin Movimientos</h3>
+            <h3 className="text-lg font-bold text-zinc-900 mb-2">Sin Movimientos</h3>
             <p className="text-zinc-500 text-lg mb-8 max-w-md mx-auto font-medium">Aún no se han registrado movimientos de inventario en el sistema.</p>
           </div>
         )}

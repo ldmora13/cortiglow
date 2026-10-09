@@ -137,7 +137,7 @@ export default function QuoteDetail() {
   if (isError || !quote) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">❌</div>
+        <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg></div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Cotización no encontrada</h2>
         <Link to="/quotes" className="text-amber-500 hover:text-zinc-800 font-medium">
           ← Volver a cotizaciones
@@ -156,7 +156,7 @@ export default function QuoteDetail() {
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
         <div className="flex-1">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-2">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900">
               {quote.quote_number}
             </h1>
             {getStatusBadge(quote.status)}
@@ -182,7 +182,11 @@ export default function QuoteDetail() {
 
       {quote.converted_order && (
         <div className="bg-zinc-100 border-2 border-zinc-300 rounded-2xl p-4 flex items-center gap-3">
-          <span className="text-2xl">✅</span>
+          <span className="w-9 h-9 rounded-xl bg-zinc-900 text-white flex items-center justify-center shrink-0" aria-hidden="true">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </span>
           <div className="flex-1">
             <div className="font-bold text-zinc-800">Convertida a Orden</div>
             <div className="text-sm text-zinc-700">Orden: {quote.converted_order.order_number}</div>
@@ -196,25 +200,22 @@ export default function QuoteDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
         <div className="lg:col-span-2 space-y-4 lg:space-y-6">
           <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-6">
-            <h2 className="text-lg font-black text-gray-900 mb-4">Cliente</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">Cliente</h2>
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <span className="text-xl">👤</span>
                 <span className="font-bold text-gray-900">{quote.customer?.name}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xl">📱</span>
                 <span className="text-gray-700">{quote.customer?.phone}</span>
               </div>
               {quote.customer?.email && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">📧</span>
+                  <span className="text-xl"></span>
                   <span className="text-gray-700">{quote.customer?.email}</span>
                 </div>
               )}
               {quote.customer?.address && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">📍</span>
                   <span className="text-gray-700">{quote.customer?.address}</span>
                 </div>
               )}
@@ -222,7 +223,7 @@ export default function QuoteDetail() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-6">
-            <h2 className="text-lg font-black text-gray-900 mb-4">Productos</h2>
+            <h2 className="text-lg font-bold text-gray-900 mb-4">Productos</h2>
             <div className="space-y-3">
               {quote.items?.map((item: any) => (
                 <div key={item.id} className="p-4 bg-gray-50 rounded-xl">
@@ -232,8 +233,8 @@ export default function QuoteDetail() {
                       {item.item_type === 'curtain' ? (
                         <div className="text-sm text-zinc-600 mt-1 space-y-1">
                           <div>📐 {item.square_meters?.toFixed(2)} m² ({item.width_meters}m × {item.height_meters}m)</div>
-                          <div>🎨 {item.fabric_type}</div>
-                          {item.finish && <div>✨ {item.finish.name} - {formatCOP(item.finish_price || 0)}</div>}
+                          <div>{item.fabric_type}</div>
+                          {item.finish && <div>{item.finish.name} - {formatCOP(item.finish_price || 0)}</div>}
                         </div>
                       ) : (
                         <div className="text-sm text-zinc-600 mt-1">
@@ -242,7 +243,7 @@ export default function QuoteDetail() {
                       )}
                     </div>
                     <div className="text-right">
-                      <div className="font-black text-zinc-600 text-lg">{formatCOP(item.subtotal)}</div>
+                      <div className="font-bold text-zinc-600 text-lg">{formatCOP(item.subtotal)}</div>
                     </div>
                   </div>
                 </div>
@@ -252,7 +253,7 @@ export default function QuoteDetail() {
 
           {quote.notes && (
             <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-6">
-              <h2 className="text-lg font-black text-gray-900 mb-3">Notas</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-3">Notas</h2>
               <p className="text-gray-700 whitespace-pre-line">{quote.notes}</p>
             </div>
           )}
@@ -260,13 +261,13 @@ export default function QuoteDetail() {
 
         <div className="space-y-6">
           <div className="bg-white border border-zinc-200 rounded-2xl shadow-sm p-6">
-            <h3 className="text-lg font-black text-gray-900 mb-4">Resumen</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Resumen</h3>
             <div className="space-y-3">
               <div className="flex justify-between text-sm"><span className="text-gray-700">Subtotal:</span><span className="font-bold">{formatCOP(quote.subtotal)}</span></div>
               {quote.discount > 0 && <div className="flex justify-between text-sm text-green-600"><span>Descuento:</span><span className="font-bold">-{formatCOP(quote.discount)}</span></div>}
               <div className="flex justify-between text-sm"><span className="text-gray-700">IVA (19%):</span><span className="font-bold">{formatCOP(quote.tax)}</span></div>
               <div className="border-t-2 border-zinc-300 pt-3">
-                <div className="flex justify-between items-center"><span className="text-lg font-black text-gray-900">TOTAL:</span><span className="text-2xl font-black text-zinc-800">{formatCOP(quote.total)}</span></div>
+                <div className="flex justify-between items-center"><span className="text-lg font-bold text-gray-900">TOTAL:</span><span className="text-2xl font-bold text-zinc-800">{formatCOP(quote.total)}</span></div>
               </div>
               <div className={clsx("mt-4 p-3 rounded-lg text-sm font-bold text-center", isExpired ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700")}>
                 {isExpired ? '⚠️ Expirada' : '✓ Válida'} hasta {format(new Date(quote.valid_until), 'dd/MM/yyyy', { locale: es })}
@@ -275,7 +276,7 @@ export default function QuoteDetail() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 p-6 space-y-3">
-            <h3 className="text-lg font-black text-gray-900 mb-4">Acciones</h3>
+            <h3 className="text-lg font-bold text-gray-900 mb-4">Acciones</h3>
             {canConvert && (
               <button onClick={handleConvertToOrder} disabled={isConverting} className="w-full py-3 bg-zinc-900 hover:bg-zinc-800 text-white rounded-xl font-bold disabled:opacity-50">
                 {isConverting ? 'Convirtiendo...' : 'Convertir a Orden'}
@@ -293,11 +294,11 @@ export default function QuoteDetail() {
               </div>
             )}
             <button onClick={handlePrint} className="w-full py-2 border-2 border-zinc-300 text-zinc-700 rounded-lg font-semibold hover:bg-white text-sm">
-              🖨️ Imprimir
+              Imprimir
             </button>
             {canEdit && (
               <button onClick={handleDelete} disabled={isDeleting} className="w-full py-2 border-2 border-red-300 text-red-700 rounded-lg font-semibold hover:bg-red-50 text-sm disabled:opacity-50">
-                🗑️ Eliminar
+                Eliminar
               </button>
             )}
           </div>

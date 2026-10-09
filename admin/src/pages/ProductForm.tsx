@@ -191,7 +191,7 @@ export default function ProductForm() {
     <div className="max-w-7xl mx-auto space-y-6 pb-20 md:pb-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-zinc-900 to-zinc-600">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
             {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
           </h1>
           <p className="text-zinc-600 mt-1">
@@ -206,7 +206,7 @@ export default function ProductForm() {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white rounded-[2rem] shadow-sm border border-zinc-200 overflow-hidden">
+      <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
         <div className="p-6 md:p-8 space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Columna Izquierda (Principal) */}
@@ -214,7 +214,7 @@ export default function ProductForm() {
               
               {/* Tarjeta: Información General */}
               <div className="bg-zinc-50/50 p-5 md:p-7 rounded-2xl border border-zinc-100 space-y-5 md:space-y-6">
-                <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <span className="text-xl">📝</span> Información General
                 </h3>
                 
@@ -266,8 +266,8 @@ export default function ProductForm() {
 
               {/* Tarjeta: Precios y Costos */}
               <div className="bg-zinc-50/50 p-5 md:p-7 rounded-2xl border border-zinc-100 space-y-5 md:space-y-6">
-                <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                  <span className="text-xl">💰</span> Precios y Costos
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  Precios y Costos
                 </h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
@@ -314,8 +314,8 @@ export default function ProductForm() {
 
               {/* Tarjeta: Inventario */}
               <div className="bg-zinc-50/50 p-5 md:p-7 rounded-2xl border border-zinc-100 space-y-5 md:space-y-6">
-                <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
-                  <span className="text-xl">📦</span> Inventario
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+                  Inventario
                 </h3>
                 
                 <div>
@@ -341,7 +341,7 @@ export default function ProductForm() {
               
               {/* Tarjeta: Organización */}
               <div className="bg-zinc-50/50 p-5 md:p-7 rounded-2xl border border-zinc-100 space-y-5 md:space-y-6">
-                <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <span className="text-xl">📂</span> Clasificación
                 </h3>
                 
@@ -422,7 +422,7 @@ export default function ProductForm() {
 
               {/* Tarjeta: Multimedia */}
               <div className="bg-zinc-50/50 p-5 md:p-7 rounded-2xl border border-zinc-100 space-y-5 md:space-y-6">
-                <h3 className="text-lg font-black text-gray-900 flex items-center gap-2">
+                <h3 className="text-lg font-bold text-gray-900 flex items-center gap-2">
                   <span className="text-xl">📸</span> Multimedia
                 </h3>
                 

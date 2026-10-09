@@ -47,14 +47,14 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
               onClick={() => setShowCustomerModal(true)}
               className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all font-medium shadow-sm hover:shadow-md whitespace-nowrap"
             >
-              ➕ Nuevo
+              Nuevo
             </button>
           </div>
 
           <div className="max-h-96 overflow-y-auto space-y-2">
             {filteredCustomers.length === 0 ? (
               <div className="text-center py-12">
-                <div className="text-6xl mb-4">🔍</div>
+                <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg></div>
                 <p className="text-gray-500">No se encontraron clientes</p>
                 <button
                   onClick={() => setShowCustomerModal(true)}
@@ -81,9 +81,9 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-semibold text-gray-900">{customer.name}</p>
-                      <p className="text-sm text-zinc-600">📱 {customer.phone}</p>
+                      <p className="text-sm text-zinc-600">{customer.phone}</p>
                       {customer.email && (
-                        <p className="text-sm text-gray-500">📧 {customer.email}</p>
+                        <p className="text-sm text-gray-500">{customer.email}</p>
                       )}
                     </div>
                     {selectedCustomer?.id === customer.id && (

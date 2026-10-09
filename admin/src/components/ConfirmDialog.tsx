@@ -25,70 +25,67 @@ export default function ConfirmDialog({
 
   const config = {
     danger: {
-      icon: '🗑️',
-      gradient: 'from-red-500 to-rose-500',
-      confirmBg: 'from-red-600 to-rose-600',
-      confirmHover: 'hover:from-red-700 hover:to-rose-700'
+      iconBg: 'bg-rose-100 text-rose-700',
+      iconPath: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
+      confirmBg: 'bg-rose-600 hover:bg-rose-700',
     },
     warning: {
-      icon: '⚠️',
-      gradient: 'from-orange-500 to-amber-500',
-      confirmBg: 'from-orange-600 to-amber-600',
-      confirmHover: 'hover:from-orange-700 hover:to-amber-700'
+      iconBg: 'bg-amber-100 text-amber-700',
+      iconPath: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z',
+      confirmBg: 'bg-zinc-900 hover:bg-zinc-700',
     },
     info: {
-      icon: 'ℹ️',
-      gradient: 'from-blue-500 to-cyan-500',
-      confirmBg: 'from-blue-600 to-cyan-600',
-      confirmHover: 'hover:from-blue-700 hover:to-cyan-700'
+      iconBg: 'bg-zinc-100 text-zinc-700',
+      iconPath: 'M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z',
+      confirmBg: 'bg-zinc-900 hover:bg-zinc-700',
     }
   };
 
   const style = config[type];
 
   return (
-    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6 bg-zinc-900/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-white rounded-[2rem] shadow-2xl w-full max-w-md overflow-hidden flex flex-col border border-zinc-200 animate-scale-in">
-        {/* Header Modal */}
-        <div className="relative p-8 pb-6 border-b border-zinc-100 bg-white z-20">
-          <div className="absolute top-6 right-6">
-            <button onClick={onCancel} className="p-2 text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 rounded-xl transition-colors active:scale-95">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" /></svg>
-            </button>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className={clsx("w-12 h-12 rounded-2xl bg-gradient-to-br flex items-center justify-center shadow-inner border", style.gradient, type === 'danger' ? 'border-red-200/50 text-white' : type === 'warning' ? 'border-orange-200/50 text-white' : 'border-blue-200/50 text-white')}>
-              <span className="text-2xl">{style.icon}</span>
-            </div>
-            <div className="pr-8">
-              <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+    <div
+      className="fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-zinc-950/50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      onClick={onCancel}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden border border-zinc-200"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-5">
+          <div className="flex items-start gap-3.5">
+            <span className={clsx('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', style.iconBg)}>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={style.iconPath} />
+              </svg>
+            </span>
+            <div className="min-w-0 pt-0.5">
+              <h2 id="confirm-title" className="text-base font-bold text-zinc-900 tracking-tight">
                 {title}
               </h2>
+              <p className="mt-1 text-sm font-medium leading-relaxed text-zinc-500">
+                {message}
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Body */}
-        <div className="p-8 pb-6">
-          <p className="text-gray-700 text-base font-medium leading-relaxed">
-            {message}
-          </p>
-        </div>
-
-        {/* Actions / Footer */}
-        <div className="px-8 pb-8 flex gap-3 pt-4 border-t border-zinc-100 mt-2">
+        <div className="px-5 pb-5 flex gap-2.5">
           <button
             onClick={onCancel}
-            className="flex-1 px-6 py-3.5 text-zinc-600 bg-white border-2 border-zinc-200 font-bold rounded-xl hover:bg-zinc-50 hover:text-zinc-900 transition-all active:scale-95"
+            className="flex-1 min-h-[44px] px-4 py-2.5 text-sm text-zinc-700 bg-white border border-zinc-300 font-semibold rounded-xl hover:bg-zinc-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
+            autoFocus
             className={clsx(
-              "flex-1 px-6 py-3.5 text-white font-bold rounded-xl shadow-md active:scale-95 transition-all bg-gradient-to-br",
-              style.confirmBg,
-              style.confirmHover
+              'flex-1 min-h-[44px] px-4 py-2.5 text-sm text-white font-semibold rounded-xl shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors',
+              style.confirmBg
             )}
           >
             {confirmText}
@@ -98,7 +95,3 @@ export default function ConfirmDialog({
     </div>
   );
 }
-
-
-
-
