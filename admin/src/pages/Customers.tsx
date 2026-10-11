@@ -26,7 +26,7 @@ export default function Customers() {
     try {
       const dataToSend = {
         name: formData.name,
-        phone: formData.phone,
+        phone: formData.phone || undefined,
         email: formData.email || undefined,
         city: formData.city || undefined,
         address: formData.address || undefined
@@ -82,7 +82,7 @@ export default function Customers() {
       setFormData({
         name: customer.name,
         email: customer.email || '',
-        phone: customer.phone,
+        phone: customer.phone || '',
         city: customer.city || '',
         address: customer.address || ''
       });
@@ -400,10 +400,10 @@ export default function Customers() {
 
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
-                  Teléfono *
+                  Teléfono
                 </label>
                 <input
-                  required
+                  type="tel"
                   value={formData.phone}
                   onChange={(e) => setFormData({...formData, phone: e.target.value})}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all font-medium"

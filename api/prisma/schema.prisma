@@ -122,7 +122,7 @@ model Customer {
   id              String   @id @default(uuid())
   name            String
   email           String?
-  phone           String   // +57XXXXXXXXXX
+  phone           String?  // +57XXXXXXXXXX
   address         String?
   city            String?  // Bogota, Medellin, Cali, etc.
   department      String?  // Cundinamarca, Antioquia, Valle del Cauca, etc.

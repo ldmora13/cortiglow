@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import clsx from 'clsx';
 import NotificationContainer from './NotificationContainer';
-import { Users, FileText, ShoppingCart, Package, Tags, Layers, Box, BarChart3, Shield, History } from 'lucide-react';
+import { Users, FileText, ShoppingCart, Package, Tags, Layers, Box, Truck, BarChart3, Shield, History } from 'lucide-react';
 
 interface NavItemData {
   name: string;
@@ -119,6 +119,12 @@ export default function Layout() {
       path: '/customers',
       description: 'Administra la base de clientes',
       icon: <Users className="w-5 h-5" />
+    },
+    { 
+      name: 'Proveedores', 
+      path: '/providers',
+      description: 'Gestiona proveedores y contactos',
+      icon: <Truck className="w-5 h-5" />
     },
     {
       name: 'Categorías',

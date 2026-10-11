@@ -3,6 +3,7 @@ export const prerender = true;
 import Layout from '../layouts/Layout.astro';
 import ProductGrid from '../components/ProductGrid';
 import { ProductService } from '../services/product.service';
+import Lamp  from '../components/Lamp';
 
 const pageTitle = 'CortiGlow | La Luz y Sombra que Transforman tu Espacio';
 const pageDescription = 'Descubre lo mejor en toda clase de cortinas, persianas e iluminación premium en Colombia. Envío gratis, garantía 100%. Paga con Nequi, Daviplata, PSE. WhatsApp +57 322 946 8431';
@@ -67,6 +68,10 @@ const products = await ProductService.getProducts();
 			<span class="text-xs text-gray-400 uppercase tracking-widest hidden sm:block">Descubrir</span>
 			<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
 		</a>
+	</section>
+
+	<section class="h-screen w-full flex items-center justify-center bg-trueblack-900/95 border-t border-white/5">
+		<Lamp client:load />
 	</section>
 
 	<!-- Catálogo de Productos -->

@@ -106,7 +106,7 @@ export default function Orders() {
     return (
       order.order_number.toLowerCase().includes(search) ||
       order.customer.name.toLowerCase().includes(search) ||
-      order.customer.phone.includes(search)
+      order.customer.phone?.includes(search)
     );
   });
 

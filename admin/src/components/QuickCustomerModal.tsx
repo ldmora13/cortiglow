@@ -22,7 +22,11 @@ export default function QuickCustomerModal({ isOpen, onClose, onSuccess }: Quick
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await api.post('/customers', formData);
+      const { data } = await api.post('/customers', {
+        ...formData,
+        phone: formData.phone || undefined,
+        email: formData.email || undefined
+      });
       onSuccess(data);
       notify.success('Cliente creado exitosamente');
       setFormData({ name: '', phone: '', email: '' });
@@ -75,12 +79,11 @@ export default function QuickCustomerModal({ isOpen, onClose, onSuccess }: Quick
 
           <div>
             <label htmlFor="quick-phone" className="block text-sm font-bold text-gray-700 mb-2">
-              Teléfono *
+              Teléfono (opcional)
             </label>
             <input
               type="tel"
               id="quick-phone"
-              required
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
@@ -128,4 +131,3 @@ export default function QuickCustomerModal({ isOpen, onClose, onSuccess }: Quick
     </div>
   );
 }
-

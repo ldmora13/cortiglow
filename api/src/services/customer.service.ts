@@ -4,7 +4,7 @@ import { auditService } from './audit.service';
 interface CustomerPayload {
   name: string;
   email?: string;
-  phone: string;
+  phone?: string;
   address?: string;
   city?: string;
   department?: string;
@@ -47,8 +47,8 @@ export class CustomerService {
   }
 
   async createCustomer(data: CustomerPayload, userId: string = 'SYSTEM') {
-    if (!data.name || !data.phone) {
-      throw new Error('Nombre y teléfono son requeridos');
+    if (!data.name) {
+      throw new Error('El nombre es requerido');
     }
 
     if (data.phone) {

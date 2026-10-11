@@ -21,7 +21,7 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
 
   const filteredCustomers = customers.filter(c => 
     c.name.toLowerCase().includes(searchCustomer.toLowerCase()) ||
-    c.phone.includes(searchCustomer)
+    c.phone?.includes(searchCustomer)
   );
 
   return (

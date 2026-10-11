@@ -21,7 +21,7 @@ export const QuoteCustomerStep: React.FC<QuoteCustomerStepProps> = ({
 
   const filteredCustomers = customers.filter(c => 
     c.name.toLowerCase().includes(searchCustomer.toLowerCase()) ||
-    c.phone.includes(searchCustomer)
+    c.phone?.includes(searchCustomer)
   );
 
   return (

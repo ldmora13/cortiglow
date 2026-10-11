@@ -50,8 +50,6 @@ export default function ProductForm() {
 
   // Ruta de categoría seleccionada, de raíz a hoja: levels[0] = familia principal.
   const [levels, setLevels] = useState<string[]>([]);
-  // Campo monetario con foco: mientras se edita se muestra el valor crudo.
-  const [moneyFocus, setMoneyFocus] = useState<'price' | 'cost' | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const [imageFiles, setImageFiles] = useState<File[]>([]);
@@ -267,7 +265,6 @@ export default function ProductForm() {
   const moneyDisplay = (key: 'price' | 'cost') => {
     const raw = formData[key];
     if (raw === '') return '';
-    if (moneyFocus === key) return raw;
     const parsed = parseFloat(raw);
     if (Number.isNaN(parsed)) return raw;
     return formatCOP(parsed).replace('$ ', '');
@@ -461,7 +458,6 @@ export default function ProductForm() {
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <span className="text-emerald-600 font-bold">$</span>
                       </div>
                       <input
                         id="product-cost"
@@ -470,8 +466,6 @@ export default function ProductForm() {
                         value={moneyDisplay('cost')}
                         aria-invalid={!!errors.cost}
                         aria-describedby={errors.cost ? 'field-cost-error' : undefined}
-                        onFocus={() => setMoneyFocus('cost')}
-                        onBlur={() => setMoneyFocus(null)}
                         onChange={(e) => {
                           const v = e.target.value;
                           set({ cost: v === '' ? '' : parseCOPInput(v).toString() });
@@ -490,7 +484,6 @@ export default function ProductForm() {
                     </label>
                     <div className="relative">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <span className="text-zinc-500 font-bold">$</span>
                       </div>
                       <input
                         id="product-price"
@@ -499,8 +492,6 @@ export default function ProductForm() {
                         value={moneyDisplay('price')}
                         aria-invalid={!!errors.price}
                         aria-describedby={errors.price ? 'field-price-error' : undefined}
-                        onFocus={() => setMoneyFocus('price')}
-                        onBlur={() => setMoneyFocus(null)}
                         onChange={(e) => {
                           const v = e.target.value;
                           set({ price: v === '' ? '' : parseCOPInput(v).toString() });

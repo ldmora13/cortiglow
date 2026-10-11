@@ -4,7 +4,7 @@ export interface Customer {
   document_number: string;
   name: string;
   email?: string;
-  phone: string;
+  phone?: string;
   address?: string;
   city?: string;
   notes?: string;
