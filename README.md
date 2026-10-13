@@ -61,6 +61,21 @@ Este proyecto está dividido en 3 carpetas principales que funcionan de manera i
    ```
    🔷 Web: `http://localhost:4321`
 
+### Despliegue de cambios de base de datos
+
+Las migraciones de Prisma deben ejecutarse antes de iniciar la API en producción:
+
+```bash
+cd api
+npm ci
+npm run db:deploy
+npm run build
+npm start
+```
+
+El listado público usa únicamente productos activos. El panel admin consulta los
+inactivos con autenticación para permitir su reactivación.
+
 ### 🔥 Hot Reload Automático
 
 Los cambios en el código se reflejan automáticamente sin necesidad de reiniciar los servidores:

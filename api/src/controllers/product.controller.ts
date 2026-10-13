@@ -7,7 +7,7 @@ export class ProductController {
   
   async getAll(req: Request, res: Response) {
     try {
-      const products = await productService.getAllProducts();
+      const products = await productService.getAllProducts(req.query.includeInactive === 'true');
       res.json(products);
     } catch (error: any) {
       res.status(500).json({ error: 'Error fetching products' });
@@ -52,14 +52,24 @@ export class ProductController {
     }
   }
 
-  async delete(req: Request, res: Response) {
+  async setStatus(req: Request, res: Response) {
     try {
       const userId = extractUserId(req) || 'SYSTEM';
-      const result = await productService.deleteProduct(req.params.id, userId);
+      if (typeof req.body.is_active !== 'boolean') {
+        return res.status(400).json({ error: 'is_active debe ser booleano' });
+      }
+      const result = await productService.setProductActive(req.params.id, req.body.is_active, userId);
       apicache.clear('/api/products');
       res.json(result);
     } catch (error: any) {
-      res.status(400).json({ error: 'Error deleting product' });
+      if (error.message === 'Product not found') {
+        return res.status(404).json({ error: 'Producto no encontrado' });
+      }
+      if (error.message.includes('stock disponible')) {
+        return res.status(409).json({ error: error.message });
+      }
+      console.error(error);
+      res.status(500).json({ error: 'Error al cambiar el estado del producto' });
     }
   }
 }

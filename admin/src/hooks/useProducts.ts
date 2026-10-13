@@ -41,8 +41,9 @@ export const useProducts = () => {
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: ProductService.deleteProduct,
+  const statusMutation = useMutation({
+    mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
+      ProductService.setProductActive(id, isActive),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
     },
@@ -62,10 +63,10 @@ export const useProducts = () => {
     getProductQuery,
     createProduct: createMutation.mutateAsync,
     updateProduct: updateMutation.mutateAsync,
-    deleteProduct: deleteMutation.mutateAsync,
+    setProductActive: statusMutation.mutateAsync,
     
     isCreating: createMutation.isPending,
     isUpdating: updateMutation.isPending,
-    isDeleting: deleteMutation.isPending,
+    isChangingStatus: statusMutation.isPending,
   };
 };

@@ -120,12 +120,6 @@ export default function Layout() {
       description: 'Administra la base de clientes',
       icon: <Users className="w-5 h-5" />
     },
-    { 
-      name: 'Proveedores', 
-      path: '/providers',
-      description: 'Gestiona proveedores y contactos',
-      icon: <Truck className="w-5 h-5" />
-    },
     {
       name: 'Categorías',
       path: '/categories',
@@ -137,6 +131,12 @@ export default function Layout() {
       path: '/finishes',
       description: 'Gestiona acabados y terminaciones',
       icon: <Layers className="w-5 h-5" />
+    },
+    { 
+      name: 'Proveedores', 
+      path: '/providers',
+      description: 'Gestiona proveedores y contactos',
+      icon: <Truck className="w-5 h-5" />
     },
     {
       name: 'Productos',

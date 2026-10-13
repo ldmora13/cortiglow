@@ -2,9 +2,9 @@ import prisma from '../prisma';
 import { Prisma } from '@prisma/client';
 
 export class ProductRepository {
-  async findAll() {
+  async findAll(includeInactive = false) {
     return prisma.product.findMany({
-      where: { is_active: true },
+      where: includeInactive ? undefined : { is_active: true },
       orderBy: { created_at: 'desc' },
       include: { 
         category: true,
@@ -18,6 +18,17 @@ export class ProductRepository {
     return prisma.product.findFirst({
       where: { id, is_active: true },
       include: { 
+        category: true,
+        inventory: true,
+        provider: true
+      }
+    });
+  }
+
+  async findByIdIncludingInactive(id: string) {
+    return prisma.product.findUnique({
+      where: { id },
+      include: {
         category: true,
         inventory: true,
         provider: true
@@ -87,16 +98,22 @@ export class ProductRepository {
     });
   }
 
-  async delete(id: string) {
-    const product = await prisma.product.findUnique({ where: { id } });
-    if (!product) return null;
-    
-    return prisma.product.update({
-      where: { id },
-      data: { 
-        is_active: false,
-        sku: `${product.sku}_deleted_${Date.now()}`
+  async setActive(id: string, isActive: boolean) {
+    return prisma.$transaction(async (tx) => {
+      const product = await tx.product.findUnique({
+        where: { id },
+        include: { inventory: true }
+      });
+
+      if (!product) return null;
+      if (!isActive && (product.inventory?.quantity ?? 0) > 0) {
+        throw new Error('No se puede desactivar un producto con stock disponible');
       }
+
+      return tx.product.update({
+        where: { id },
+        data: { is_active: isActive }
+      });
     });
   }
 }

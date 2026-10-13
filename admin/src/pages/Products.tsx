@@ -4,56 +4,59 @@ import { formatCOP } from '../utils/currency';
 import { notify } from '../hooks/useNotification';
 import { useProducts } from '../hooks/useProducts';
 import { getCategoryLevelName, getCategoryDepth, getCategoryLevelBadgeColors } from '../utils/categoryUtils';
-import { Folder } from 'lucide-react';
+import { Folder, EyeOff } from 'lucide-react';
 
 export default function Products() {
-  const { products, categories, isLoadingProducts, deleteProduct } = useProducts();
+  const { products, categories, isLoadingProducts, setProductActive } = useProducts();
   const [searchTerm, setSearchTerm] = useState('');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [bulkChangingStatus, setBulkChangingStatus] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  const handleDelete = async (id: string, name: string) => {
+  const handleStatusChange = async (id: string, name: string, isActive: boolean) => {
     const confirmed = await notify.confirm({
-      title: 'Eliminar Producto',
-      message: `¿Estás seguro de eliminar "${name}"?`,
-      confirmText: 'Eliminar',
-      type: 'danger'
+      title: isActive ? 'Reactivar Producto' : 'Desactivar Producto',
+      message: isActive
+        ? `¿Deseas reactivar "${name}"? `
+        : `¿Deseas desactivar "${name}"?`,
+      confirmText: isActive ? 'Reactivar' : 'Desactivar',
+      type: isActive ? 'info' : 'danger'
     });
 
     if (!confirmed) return;
 
     try {
-      await deleteProduct(id);
-      notify.success('Producto eliminado exitosamente');
-    } catch (error) {
-      notify.error('Error al eliminar el producto');
+      await setProductActive({ id, isActive });
+      notify.success(isActive ? 'Producto reactivado' : 'Producto desactivado');
+    } catch (error: any) {
+      notify.error(error.response?.data?.error || 'No se pudo cambiar el estado del producto');
     }
   };
 
-  const handleBulkDelete = async () => {
+  const handleBulkDeactivate = async () => {
     const items = products.filter(p => selectedIds.includes(p.id));
-    if (items.length === 0) return;
+    const activeItems = items.filter(p => p.is_active);
+    if (activeItems.length === 0) return;
     const confirmed = await notify.confirm({
-      title: `Eliminar ${items.length} producto${items.length > 1 ? 's' : ''}`,
-      message: 'Esta acción no se puede deshacer.',
-      confirmText: 'Eliminar',
+      title: `Desactivar ${activeItems.length} producto${activeItems.length > 1 ? 's' : ''}`,
+      message: 'Cada producto debe tener stock en cero. Los productos no se eliminarán.',
+      confirmText: 'Desactivar',
       type: 'danger'
     });
 
     if (!confirmed) return;
 
-    setBulkDeleting(true);
+    setBulkChangingStatus(true);
     try {
-      await Promise.all(items.map(p => deleteProduct(p.id)));
-      notify.success(`${items.length} producto${items.length > 1 ? 's eliminados' : ' eliminado'}`);
+      await Promise.all(activeItems.map(p => setProductActive({ id: p.id, isActive: false })));
+      notify.success(`${activeItems.length} producto${activeItems.length > 1 ? 's desactivados' : ' desactivado'}`);
       setSelectedIds([]);
-    } catch (error) {
-      notify.error('No se pudieron eliminar todos los productos');
+    } catch (error: any) {
+      notify.error(error.response?.data?.error || 'No se pudieron desactivar todos los productos');
     } finally {
-      setBulkDeleting(false);
+      setBulkChangingStatus(false);
     }
   };
 
@@ -176,11 +179,11 @@ export default function Products() {
           <span className="text-sm font-semibold">{selectedIds.length} seleccionado{selectedIds.length > 1 ? 's' : ''}</span>
           <span className="flex gap-2 sm:ml-auto">
             <button
-              onClick={handleBulkDelete}
-              disabled={bulkDeleting}
+              onClick={handleBulkDeactivate}
+              disabled={bulkChangingStatus}
               className="px-3.5 py-2 min-h-[40px] rounded-lg bg-red-600 text-white text-sm font-bold hover:bg-red-500 disabled:opacity-60 transition-colors"
             >
-              {bulkDeleting ? 'Eliminando…' : 'Eliminar'}
+              {bulkChangingStatus ? 'Desactivando…' : 'Desactivar'}
             </button>
             <button
               onClick={() => setSelectedIds([])}
@@ -274,13 +277,11 @@ export default function Products() {
                         </svg>
                       </Link>
                       <button
-                        onClick={() => handleDelete(product.id, product.name)}
-                        className="p-2 text-zinc-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Eliminar"
+                        onClick={() => handleStatusChange(product.id, product.name, !product.is_active)}
+                        className={`px-2 py-1 text-xs font-bold rounded-lg transition-colors ${product.is_active ? 'text-red-600 hover:bg-red-50' : 'text-green-600 hover:bg-green-50'}`}
+                        title={product.is_active ? 'Desactivar' : 'Reactivar'}
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                        <EyeOff className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
@@ -377,12 +378,11 @@ export default function Products() {
                           </svg>
                         </Link>
                         <button
-                          onClick={() => handleDelete(product.id, product.name)}
-                          className="text-zinc-400 hover:text-red-600 bg-white hover:bg-red-50 border border-zinc-200 hover:border-transparent p-2 rounded-lg transition-all"
+                          onClick={() => handleStatusChange(product.id, product.name, !product.is_active)}
+                            className={`bg-white border border-zinc-200 hover:border-transparent px-2 py-1 rounded-lg text-xs font-bold transition-all ${product.is_active ? 'text-red-600 hover:bg-red-50' : 'text-green-600 hover:bg-green-50'}`}
+                            title={product.is_active ? 'Desactivar' : 'Reactivar'}
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
+                           <EyeOff className="w-5 h-5 text-red-600" />
                         </button>
                       </div>
                     </td>

@@ -80,6 +80,7 @@ model Product {
 
   @@map("products")
   @@index([category_id]) // Index for performance
+  @@index([is_active])
 }
 
 // Inventario por Producto

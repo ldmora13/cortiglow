@@ -3,7 +3,7 @@ import type { Product, Category, Finish } from '../types/product.types';
 
 export const ProductService = {
   getProducts: async (): Promise<Product[]> => {
-    const { data } = await api.get('/products');
+    const { data } = await api.get('/products?includeInactive=true');
     return data;
   },
 
@@ -22,8 +22,9 @@ export const ProductService = {
     return data;
   },
 
-  deleteProduct: async (id: string): Promise<void> => {
-    await api.delete(`/products/${id}`);
+  setProductActive: async (id: string, isActive: boolean): Promise<Product> => {
+    const { data } = await api.patch(`/products/${id}/status`, { is_active: isActive });
+    return data;
   },
 
   // Categories

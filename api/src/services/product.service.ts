@@ -16,8 +16,8 @@ interface ProductPayload {
 }
 
 export class ProductService {
-  async getAllProducts() {
-    return await productRepository.findAll();
+  async getAllProducts(includeInactive = false) {
+    return await productRepository.findAll(includeInactive);
   }
 
   async getProductById(id: string) {
@@ -81,14 +81,26 @@ export class ProductService {
     return updated;
   }
 
-  async deleteProduct(id: string, userId: string = 'SYSTEM') {
-    const existing = await productRepository.findById(id);
+  async setProductActive(id: string, isActive: boolean, userId: string = 'SYSTEM') {
+    const existing = await prismaProductById(id);
     if (!existing) throw new Error('Product not found');
-    
-    await productRepository.delete(id);
-    await auditService.logAction('PRODUCT', id, 'DELETE', userId, existing, { is_active: false });
-    return { success: true };
+
+    const updated = await productRepository.setActive(id, isActive);
+    if (!updated) throw new Error('Product not found');
+    await auditService.logAction(
+      'PRODUCT',
+      id,
+      isActive ? 'ACTIVATE' : 'DEACTIVATE',
+      userId,
+      existing,
+      updated
+    );
+    return updated;
   }
+}
+
+async function prismaProductById(id: string) {
+  return productRepository.findByIdIncludingInactive(id);
 }
 
 export const productService = new ProductService();
