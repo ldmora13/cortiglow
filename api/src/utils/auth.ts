@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
+import prisma from '../prisma';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'super-secret-key-change-in-production';
 const JWT_EXPIRES_IN = '24h';
@@ -49,10 +50,40 @@ export const extractUserId = (req: Request): string | undefined => {
   return decoded ? decoded.id : undefined;
 };
 
-export const requireAdmin = (req: Request, res: Response, next: NextFunction) => {
-  const user = (req as any).user as AuthUser;
-  if (!user || user.role !== 'admin') {
-    return res.status(403).json({ error: 'Admin access required' });
+export const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
+  return requireRole('admin')(req, res, next);
+};
+
+export const requireCatalogEditor = async (req: Request, res: Response, next: NextFunction) => {
+  return requireRole('admin', 'editor')(req, res, next);
+};
+
+const requireRole = (...allowedRoles: string[]) => async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const user = (req as any).user as AuthUser | undefined;
+  if (!user) {
+    return res.status(401).json({ error: 'No authenticated user' });
   }
-  next();
+
+  try {
+    const dbUser = await prisma.profile.findUnique({
+      where: { id: user.id },
+      select: { role: true, is_active: true },
+    });
+
+    if (!dbUser || !dbUser.is_active) {
+      return res.status(401).json({ error: 'User is not active' });
+    }
+
+    if (!allowedRoles.includes(dbUser.role)) {
+      return res.status(403).json({ error: 'Admin access required' });
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
 };

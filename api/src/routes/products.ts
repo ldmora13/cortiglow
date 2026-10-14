@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { productController } from '../controllers/product.controller';
 import apicache from 'apicache';
-import { requireAdmin, requireAuth } from '../utils/auth';
+import { requireAdmin, requireAuth, requireCatalogEditor } from '../utils/auth';
 
 const router = Router();
 const cache = apicache.middleware;
@@ -17,8 +17,8 @@ router.get('/', (req, res, next) => {
   next();
 }, productController.getAll);
 router.get('/:id', productController.getById);
-router.post('/', productController.create);
-router.put('/:id', productController.update);
+router.post('/', requireAuth, requireCatalogEditor, productController.create);
+router.put('/:id', requireAuth, requireCatalogEditor, productController.update);
 router.patch('/:id/status', requireAuth, requireAdmin, productController.setStatus);
 
 export default router;

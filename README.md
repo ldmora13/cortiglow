@@ -76,6 +76,33 @@ npm start
 El listado público usa únicamente productos activos. El panel admin consulta los
 inactivos con autenticación para permitir su reactivación.
 
+### Almacenamiento de imágenes en Cloudflare R2
+
+Las imágenes de productos se almacenan en el bucket `cortiglow` y se publican
+mediante `https://media.cortiglow.com`. La API usa la compatibilidad S3 de R2;
+las credenciales solo deben existir en `api/.env`, nunca en el frontend ni en
+el repositorio. Copia `api/.env.example` a `api/.env` y completa:
+
+- `R2_ACCOUNT_ID`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+- `R2_BUCKET_NAME=cortiglow`
+- `R2_ENDPOINT` (endpoint S3 privado de la cuenta)
+- `R2_PUBLIC_URL=https://media.cortiglow.com`
+
+En Cloudflare Dashboard, crea el bucket `cortiglow`, asigna el dominio
+personalizado `media.cortiglow.com` en **R2 > Settings > Custom Domains** y
+aplica la política de `api/r2-cors.json` en la configuración CORS del bucket.
+La política permite lecturas `GET`/`HEAD` desde `cortiglow.com`,
+`www.cortiglow.com` y el servidor local de desarrollo. 
+
+La ruta `POST /api/upload` requiere un JWT de un usuario con rol `admin` o
+`editor`, acepta JPEG, PNG, WebP y AVIF de hasta 5 MB y recibe el SKU del
+producto. Los nombres se generan como
+`products/<SKU>/<uuid>.<extension>` y se sirven con caché inmutable de un año.
+El admin sube las URLs resultantes al campo
+`Product.images`, que admite múltiples imágenes por producto.
+
 ### 🔥 Hot Reload Automático
 
 Los cambios en el código se reflejan automáticamente sin necesidad de reiniciar los servidores:

@@ -21,6 +21,9 @@ interface ProductFormData {
   min_stock: string;
 }
 
+const allowedImageTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
+const maxImageSize = 5 * 1024 * 1024;
+
 const inputBase =
   'w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all bg-white';
 const inputOk = 'border-zinc-200';
@@ -109,6 +112,18 @@ export default function ProductForm() {
     const files = Array.from(e.target.files || []);
     e.target.value = '';
 
+    const invalidFile = files.find((file) => !allowedImageTypes.has(file.type));
+    if (invalidFile) {
+      setErrors((prev) => ({ ...prev, images: 'Solo se permiten imágenes JPEG, PNG, WebP o AVIF' }));
+      return;
+    }
+
+    const oversizedFile = files.find((file) => file.size > maxImageSize);
+    if (oversizedFile) {
+      setErrors((prev) => ({ ...prev, images: 'Cada imagen debe pesar máximo 5 MB' }));
+      return;
+    }
+
     if (files.length + imageFiles.length + formData.images.length > 5) {
       setErrors((prev) => ({ ...prev, images: 'Máximo 5 imágenes por producto' }));
       return;
@@ -143,7 +158,7 @@ export default function ProductForm() {
     setImagePreviews(imagePreviews.filter((_, i) => i !== index));
   };
 
-  const uploadImages = async (): Promise<string[]> => {
+  const uploadImages = async (productSku: string): Promise<string[]> => {
     if (imageFiles.length === 0) return formData.images;
 
     setUploading(true);
@@ -153,6 +168,7 @@ export default function ProductForm() {
       for (const file of imageFiles) {
         const uploadData = new FormData();
         uploadData.append('file', file);
+        uploadData.append('productSku', productSku);
         const { data } = await api.post('/upload', uploadData, { headers: { 'Content-Type': 'multipart/form-data' } });
         const publicUrl = data.url;
 
@@ -216,8 +232,6 @@ export default function ProductForm() {
     }
 
     try {
-      const imageUrls = await uploadImages();
-
       const payload = {
         name: formData.name.trim(),
         sku: formData.sku.trim() || null,
@@ -226,16 +240,19 @@ export default function ProductForm() {
         cost: formData.cost ? parseCOPInput(formData.cost) : 0,
         category_id: selectedCategoryId || null,
         provider_id: formData.provider_id || null,
-        images: imageUrls,
+        images: isEditing ? formData.images : [],
         video_url: formData.video_url.trim() || null,
         min_stock: parseInt(formData.min_stock) || 5
       };
 
       if (isEditing) {
-        await updateProduct({ id: id!, data: payload });
+        const imageUrls = await uploadImages(formData.sku);
+        await updateProduct({ id: id!, data: { ...payload, images: imageUrls } });
         notify.success('Producto actualizado correctamente');
       } else {
-        await createProduct(payload);
+        const createdProduct = await createProduct(payload);
+        const imageUrls = await uploadImages(createdProduct.sku);
+        await updateProduct({ id: createdProduct.id, data: { ...payload, sku: createdProduct.sku, images: imageUrls } });
         notify.success('Producto creado correctamente');
       }
 
@@ -573,7 +590,7 @@ export default function ProductForm() {
                         <input
                           type="file"
                           multiple
-                          accept="image/*"
+                          accept="image/jpeg,image/png,image/webp,image/avif"
                           aria-labelledby="product-images-label"
                           onChange={handleImageSelect}
                           className="sr-only"

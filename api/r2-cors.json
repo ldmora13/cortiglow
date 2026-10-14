@@ -1,0 +1,13 @@
+[
+  {
+    "AllowedOrigins": [
+      "https://cortiglow.com",
+      "https://www.cortiglow.com",
+      "http://localhost:4321"
+    ],
+    "AllowedMethods": ["GET", "HEAD"],
+    "AllowedHeaders": ["*"],
+    "ExposeHeaders": ["ETag", "Content-Length"],
+    "MaxAgeSeconds": 86400
+  }
+]

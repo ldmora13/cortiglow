@@ -1,57 +1,52 @@
 import { Router } from 'express';
 import multer from 'multer';
-import path from 'path';
-import fs from 'fs';
-import { requireAuth } from '../utils/auth';
+import { requireAuth, requireCatalogEditor } from '../utils/auth';
+import { uploadProductImage } from '../services/r2.service';
 
 const router = Router();
+const allowedMimeTypes = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
+const maxFileSize = 5 * 1024 * 1024;
 
-// Ensure uploads directory exists
-const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Configure multer storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: maxFileSize },
+  fileFilter: (_req, file, callback) => {
+    callback(null, allowedMimeTypes.has(file.mimetype));
   },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
 });
 
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only images are allowed'));
-    }
-  }
-});
-
-
-router.post('/', requireAuth, upload.single('file'), (req, res) => {
+router.post('/', requireAuth, requireCatalogEditor, upload.single('file'), async (req, res, next) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
+    if (typeof req.body.productSku !== 'string' || !req.body.productSku.trim()) {
+      return res.status(400).json({ error: 'Product SKU is required' });
+    }
 
-    // Construct the public URL
-    // In production this should be based on the actual domain, e.g. api.cortiglow.com
-    const baseUrl = process.env.API_URL || 'http://localhost:3000';
-    const fileUrl = `${baseUrl}/uploads/${req.file.filename}`;
-
-    res.json({ url: fileUrl });
+    const url = await uploadProductImage(
+      req.file.buffer,
+      req.file.mimetype,
+      req.file.originalname,
+      req.body.productSku,
+    );
+    return res.status(201).json({ url });
   } catch (error) {
-    console.error('Upload error:', error);
-    res.status(500).json({ error: 'Failed to upload file' });
+    return next(error);
   }
+});
+
+router.use((error: unknown, _req: import('express').Request, res: import('express').Response, next: import('express').NextFunction) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === 'LIMIT_FILE_SIZE') {
+      return res.status(413).json({ error: 'Image exceeds the 5 MB limit' });
+    }
+    return res.status(400).json({ error: 'Invalid image upload' });
+  }
+  if (error instanceof Error && error.message.startsWith('Unsupported image')) {
+    return res.status(415).json({ error: error.message });
+  }
+  return next(error);
 });
 
 export default router;

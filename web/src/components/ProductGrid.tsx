@@ -6,6 +6,29 @@ import type { Product } from '../services/product.service';
 import type { Category } from '../services/category.service';
 import QueryProvider from './QueryProvider';
 
+function CatalogImage({ src, alt, className }: { src?: string; alt: string; className: string }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <>
+      {isLoading && <div className="absolute inset-0 animate-pulse bg-trueblack-800" aria-hidden="true" />}
+      <img
+        src={hasError ? '/logo.png' : (src || '/logo.png')}
+        alt={alt}
+        className={`${className} ${isLoading ? 'opacity-0' : 'opacity-100'}`}
+        onLoad={() => setIsLoading(false)}
+        onError={() => {
+          setHasError(true);
+          setIsLoading(false);
+        }}
+        loading="lazy"
+        decoding="async"
+      />
+    </>
+  );
+}
+
 interface Props {
   initialProducts?: Product[];
   categorySlug?: string;
@@ -137,22 +160,17 @@ function ProductGridContent({ initialProducts, categorySlug }: Props) {
 
             {/* Image Container */}
             <div className="aspect-[4/5] bg-trueblack-900 overflow-hidden relative z-10 m-2 rounded-[1.5rem]">
-              <img 
-                src={product.images?.[0] || 'https://via.placeholder.com/600'} 
+              <CatalogImage
+                src={product.images?.[0]}
                 alt={product.name}
                 className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out mix-blend-lighten ${product.images?.length > 1 ? 'group-hover:opacity-0 group-hover:scale-110' : 'group-hover:scale-110 opacity-90 group-hover:opacity-100'}`}
-                style={{ viewTransitionName: `img-${product.id}` }}
-                loading="lazy"
-                decoding="async"
               />
               
               {product.images?.length > 1 && (
-                <img 
-                  src={product.images[1]} 
+                <CatalogImage
+                  src={product.images[1]}
                   alt={`${product.name} alternate view`}
                   className="absolute inset-0 w-full h-full object-cover transition-all duration-700 ease-in-out mix-blend-lighten opacity-0 scale-125 group-hover:opacity-100 group-hover:scale-110"
-                  loading="lazy"
-                  decoding="async"
                 />
               )}
               

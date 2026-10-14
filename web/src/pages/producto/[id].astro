@@ -141,11 +141,12 @@ const productSchema = {
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
             <img 
               id="main-product-image"
-              src={product.images?.[0] || 'https://via.placeholder.com/800'} 
+              src={product.images?.[0] || '/logo.png'}
               alt={product.name}
               class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
               style={`view-transition-name: img-${product.id}`}
               loading="eager" 
+              onerror="this.onerror=null; this.src='/logo.png';"
             />
           </div>
 
@@ -162,6 +163,8 @@ const productSchema = {
                     src={img} 
                     alt={`Vista ${index + 1} de ${product.name}`}
                     class="w-full h-full object-cover hover:scale-110 transition-transform duration-300 pointer-events-none" 
+                    loading="lazy"
+                    onerror="this.onerror=null; this.src='/logo.png';"
                   />
                 </button>
               ))}
