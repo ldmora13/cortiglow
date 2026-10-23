@@ -24,7 +24,7 @@ export const OrderService = {
   },
 
   cancelOrder: async (id: string): Promise<Order> => {
-    const { data } = await api.post(`/orders/${id}/cancel`);
+    const { data } = await api.put(`/orders/${id}/status`, { status: 'cancelled' });
     return data;
   }
 };

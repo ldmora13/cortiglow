@@ -2,12 +2,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { CustomerService } from '../services/customer.service';
 import type { Customer } from '../types/customer.types';
 
-export const useCustomers = () => {
+export const useCustomers = (filters?: { search?: string; limit?: number; sort?: 'sales' }) => {
   const queryClient = useQueryClient();
 
   const customersQuery = useQuery<Customer[]>({
-    queryKey: ['customers'],
-    queryFn: CustomerService.getCustomers,
+    queryKey: ['customers', filters],
+    queryFn: () => CustomerService.getCustomers(filters),
   });
 
   const getCustomerQuery = (id: string) => useQuery<Customer>({

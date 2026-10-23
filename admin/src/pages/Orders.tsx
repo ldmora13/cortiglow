@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { notify } from '../hooks/useNotification';
 import { useOrders } from '../hooks/useOrders';
@@ -8,13 +8,31 @@ import { es } from 'date-fns/locale';
 import clsx from 'clsx';
 import type { OrderStatus } from '../types/order.types';
 
-const statusConfig: Record<string, any> = {
+type StatusConfig = {
+  icon: string;
+  color: string;
+  label: string;
+  bgClass: string;
+  textClass: string;
+};
+
+const statusConfig: Record<string, StatusConfig> = {
   pending: { icon: '', color: 'yellow', label: 'Pendiente', bgClass: 'bg-yellow-50 border-yellow-200', textClass: 'text-yellow-700' },
-  confirmed: { icon: '✓', color: 'blue', label: 'Confirmada', bgClass: 'bg-gray-50 border-zinc-200', textClass: 'text-zinc-800' },
-  in_progress: { icon: '', color: 'blue', label: 'En Progreso', bgClass: 'bg-white border-zinc-200', textClass: 'text-zinc-700' },
   completed: { icon: '', color: 'green', label: 'Completada', bgClass: 'bg-green-50 border-green-200', textClass: 'text-green-700' },
   cancelled: { icon: '', color: 'red', label: 'Cancelada', bgClass: 'bg-red-50 border-red-200', textClass: 'text-red-700' }
 };
+
+const fallbackStatusConfig: StatusConfig = {
+  icon: '',
+  color: 'zinc',
+  label: 'Estado anterior',
+  bgClass: 'bg-zinc-50 border-zinc-200',
+  textClass: 'text-zinc-600'
+};
+
+function getStatusConfig(status: string): StatusConfig {
+  return statusConfig[status] || fallbackStatusConfig;
+}
 
 export default function Orders() {
   const [statusFilter, setStatusFilter] = useState('');
@@ -26,13 +44,23 @@ export default function Orders() {
   const itemsPerPage = 15;
 
   // React Query Hook
-  const { orders, isLoadingOrders, updateOrderStatus, cancelOrder } = useOrders(
+  const { orders, isLoadingOrders, isFetchingOrders, updateOrderStatus, cancelOrder } = useOrders(
     statusFilter ? { status: statusFilter } : undefined
   );
+  const [showTableLoader, setShowTableLoader] = useState(false);
+
+  useEffect(() => {
+    if (!isFetchingOrders) {
+      setShowTableLoader(false);
+      return;
+    }
+
+    const timer = window.setTimeout(() => setShowTableLoader(true), 350);
+    return () => window.clearTimeout(timer);
+  }, [isFetchingOrders]);
 
   const handleChangeStatus = async (id: string, newStatus: OrderStatus | 'cancelled') => {
     const confirmMessages: Record<string, string> = {
-      confirmed: '¿Confirmar esta orden?',
       completed: '¿Marcar como completada? Esta acción indica que la orden fue entregada.',
       cancelled: '¿Cancelar esta orden? El inventario será restaurado.',
     };
@@ -54,7 +82,6 @@ export default function Orders() {
       }
       
       const successMessages: Record<string, string> = {
-        confirmed: 'Orden confirmada exitosamente',
         completed: 'Orden completada',
         cancelled: 'Orden cancelada - Inventario restaurado',
       };
@@ -75,7 +102,7 @@ export default function Orders() {
   };
 
   const handleBulkCancel = async () => {
-    const targets = paginatedOrders.filter((o: any) => selectedIds.includes(o.id) && o.status !== 'cancelled' && o.status !== 'completed');
+    const targets = paginatedOrders.filter((o: any) => selectedIds.includes(o.id) && o.status === 'completed');
     if (targets.length === 0) return;
     const confirmed = await notify.confirm({
       title: `Cancelar ${targets.length} orden${targets.length > 1 ? 'es' : ''}`,
@@ -124,7 +151,7 @@ export default function Orders() {
       .reduce((sum: number, o: any) => sum + Number(o.total), 0)
   };
 
-  if (isLoadingOrders) {
+  if (isLoadingOrders && orders.length === 0) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
@@ -273,7 +300,7 @@ export default function Orders() {
         </div>
       )}
 
-      {filteredOrders.length === 0 && (
+      {filteredOrders.length === 0 && !showTableLoader && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
           <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg></div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">No hay órdenes</h3>
@@ -286,7 +313,12 @@ export default function Orders() {
 
       {filteredOrders.length > 0 && (
         viewMode === 'list' ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
+          <div className="relative bg-white rounded-2xl shadow-sm border border-zinc-200 overflow-hidden">
+            {showTableLoader && (
+              <div className="absolute inset-0 z-10 flex items-start justify-center bg-white/70 pt-24 backdrop-blur-[1px]" role="status" aria-label="Actualizando órdenes">
+                <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+              </div>
+            )}
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-zinc-200">
                 <thead className="bg-white">
@@ -310,7 +342,7 @@ export default function Orders() {
                 </thead>
                 <tbody className="bg-white divide-y divide-zinc-100">
                   {paginatedOrders.map((order: any) => {
-                    const config = statusConfig[order.status];
+                    const config = getStatusConfig(order.status);
                     return (
                       <tr key={order.id} className="hover:bg-zinc-50/50 transition-colors group">
                         <td className={`${cell} whitespace-nowrap w-10`}>
@@ -394,7 +426,7 @@ export default function Orders() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
             {paginatedOrders.map((order: any) => {
-              const config = statusConfig[order.status];
+              const config = getStatusConfig(order.status);
               
               return (
                 <div key={order.id} className={clsx("bg-white rounded-2xl shadow-sm border-2 hover:shadow-md transition-all overflow-hidden", config.bgClass)}>
@@ -444,12 +476,9 @@ export default function Orders() {
 
                     <div className="flex gap-2 pt-2">
                       {order.status === 'pending' && (
-                        <button onClick={() => handleChangeStatus(order.id, 'confirmed')} className="flex-1 px-3 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 font-medium text-sm">✓ Confirmar</button>
-                      )}
-                      {(order.status === 'confirmed' || order.status === 'in_progress') && (
                         <button onClick={() => handleChangeStatus(order.id, 'completed')} className="flex-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium text-sm">Completar</button>
                       )}
-                      {order.status !== 'cancelled' && order.status !== 'completed' && (
+                      {order.status === 'completed' && (
                         <button onClick={() => handleChangeStatus(order.id, 'cancelled')} className="flex-1 px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-medium text-sm">Cancelar</button>
                       )}
                       <Link to={`/orders/${order.id}`} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 font-medium text-sm">👁️ Ver</Link>

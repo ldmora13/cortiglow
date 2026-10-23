@@ -14,8 +14,8 @@ interface CustomerPayload {
 }
 
 export class CustomerService {
-  async getAllCustomers(search?: string, limit: number = 100) {
-    const customers = await customerRepository.findAll(search, limit);
+  async getAllCustomers(search?: string, limit: number = 100, sortBySales = false) {
+    const customers = await customerRepository.findAll(search, limit, sortBySales);
     
     return customers.map(customer => ({
       ...customer,

@@ -81,7 +81,7 @@ export class OrderController {
       console.error('Error updating order status:', error);
       if (error.message === 'Orden no encontrada') {
         res.status(404).json({ error: error.message });
-      } else if (error.message === 'Estado requerido' || error.message === 'Estado inválido') {
+      } else if (error.message === 'Estado requerido' || error.message === 'Estado inválido' || error.message === 'Transición de estado no permitida') {
         res.status(400).json({ error: error.message });
       } else {
         res.status(500).json({ error: 'Error al actualizar estado de orden' });

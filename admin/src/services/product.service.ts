@@ -3,7 +3,7 @@ import type { Product, Category, Finish } from '../types/product.types';
 
 export const ProductService = {
   getProducts: async (): Promise<Product[]> => {
-    const { data } = await api.get('/products?includeInactive=true');
+    const { data } = await api.get('/products');
     return data;
   },
 

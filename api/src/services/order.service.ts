@@ -113,11 +113,19 @@ export class OrderService {
   async updateOrderStatus(id: string, status: string, userId: string = 'SYSTEM') {
     if (!status) throw new Error('Estado requerido');
     
-    const validStatuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
+    const validStatuses = ['pending', 'completed', 'cancelled'];
     if (!validStatuses.includes(status)) throw new Error('Estado inválido');
 
     const existingOrder = await orderRepository.getOrderWithInventory(id);
     if (!existingOrder) throw new Error('Orden no encontrada');
+
+    const allowedTransition =
+      (existingOrder.status === 'pending' && status === 'completed') ||
+      (existingOrder.status === 'completed' && status === 'cancelled');
+
+    if (!allowedTransition && existingOrder.status !== status) {
+      throw new Error('Transición de estado no permitida');
+    }
 
     if (status === 'cancelled' && existingOrder.status !== 'cancelled') {
       await orderRepository.cancelOrderTransaction(existingOrder, status, userId);

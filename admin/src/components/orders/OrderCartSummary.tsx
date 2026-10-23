@@ -26,7 +26,7 @@ export const OrderCartSummary: React.FC<OrderCartSummaryProps> = ({
   removeFromCart
 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden transform transition-all hover:shadow-md">
+    <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden transform transition-all hover:shadow-md">
       <div className="bg-white border-b border-zinc-200 text-zinc-900 p-5">
         <div className="flex items-center justify-between mb-2">
           <h3 className="font-bold text-xl">Carrito</h3>
@@ -38,7 +38,7 @@ export const OrderCartSummary: React.FC<OrderCartSummaryProps> = ({
         </div>
       </div>
       
-      <div className="p-5 max-h-[400px] overflow-y-auto bg-gray-50/50">
+      <div className="p-4 max-h-[320px] overflow-y-auto bg-gray-50/50">
         {cart.length === 0 ? (
           <div className="text-center py-10 text-gray-400">
             <div className="text-4xl mb-3 opacity-50">🛍️</div>

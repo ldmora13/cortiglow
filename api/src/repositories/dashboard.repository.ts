@@ -15,7 +15,7 @@ export class DashboardRepository {
   async getPendingOrdersCount() {
     return prisma.order.count({
       where: {
-        status: { in: ['pending', 'confirmed', 'in_progress'] }
+        status: { in: ['pending'] }
       }
     });
   }

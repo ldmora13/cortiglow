@@ -25,8 +25,6 @@ export function calculateOrderTotal(
 export function formatOrderStatus(status: string): string {
   const statusMap: Record<string, string> = {
     pending: 'Pendiente',
-    confirmed: 'Confirmado',
-    in_progress: 'En Progreso',
     completed: 'Completado',
     cancelled: 'Cancelado'
   };
@@ -38,8 +36,6 @@ export function formatOrderStatus(status: string): string {
 export function getStatusColor(status: string): string {
   const colorMap: Record<string, string> = {
     pending: 'gray',
-    confirmed: 'blue',
-    in_progress: 'yellow',
     completed: 'green',
     cancelled: 'red'
   };
@@ -122,7 +118,6 @@ export function getQuickDateRange(range: 'today' | 'week' | 'month' | 'year'): {
       return { from: today, to: now };
   }
 }
-
 
 
 

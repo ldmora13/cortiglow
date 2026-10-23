@@ -48,6 +48,7 @@ export interface Product {
   inventory?: Inventory;
   created_at: string;
   updated_at: string;
+  sales_count?: number;
 }
 
 export interface Finish {

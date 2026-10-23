@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useDeferredValue, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { formatCOP } from '../utils/currency';
@@ -22,7 +22,13 @@ export default function OrderForm() {
   const [step, setStep] = useState(1);
   
   // Data Fetching
-  const { customers } = useCustomers();
+  const [customerSearch, setCustomerSearch] = useState('');
+  const deferredCustomerSearch = useDeferredValue(customerSearch);
+  const { customers, isLoadingCustomers } = useCustomers(
+    deferredCustomerSearch
+      ? { search: deferredCustomerSearch, limit: 25 }
+      : { limit: 5, sort: 'sales' }
+  );
   const { products, categories } = useProducts();
   const { createOrder, isCreating } = useOrders();
   
@@ -85,14 +91,14 @@ export default function OrderForm() {
     <div className="pb-20 md:pb-6">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white border-b border-zinc-200 text-zinc-900 shadow-md mb-6">
-        <div className="max-w-7xl mx-auto px-4 py-3 md:py-4">
+        <div className="max-w-7xl mx-auto px-3 py-2 md:py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="hidden md:flex w-12 h-12 bg-zinc-100 rounded-xl items-center justify-center text-2xl">
+              <div className="hidden md:flex w-10 h-10 bg-zinc-100 rounded-lg items-center justify-center text-xl">
                 🛍️
               </div>
               <div className="min-w-0">
-                <h1 className="text-lg md:text-2xl font-bold truncate">Nueva Venta</h1>
+                <h1 className="text-base md:text-xl font-bold truncate">Nueva Venta</h1>
                 {selectedCustomer && (
                   <p className="text-xs md:text-sm text-zinc-500 truncate">
                     {selectedCustomer.name}
@@ -102,16 +108,16 @@ export default function OrderForm() {
             </div>
             <div className="text-right shrink-0">
               <p className="text-xs text-zinc-500">Total</p>
-              <p className="text-xl md:text-3xl font-bold text-zinc-900">{formatCOP(cartState.total)}</p>
+              <p className="text-lg md:text-2xl font-bold text-zinc-900">{formatCOP(cartState.total)}</p>
               <p className="text-xs text-zinc-500">{cartState.cart.length} items</p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-3">
         {/* Progress Steps */}
-        <div className="mb-8 bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
+        <div className="mb-5 bg-white rounded-xl shadow-sm border border-gray-100 p-3 md:p-4">
           <div className="flex items-center justify-between">
             {[
               { num: 1, label: 'Cliente', color: 'blue' },
@@ -121,7 +127,7 @@ export default function OrderForm() {
               <div key={s.num} className="flex-1 flex items-center">
                 <div className="flex flex-col items-center flex-1">
                   <div className={clsx(
-                    "relative w-14 h-14 md:w-16 md:h-16 rounded-2xl flex items-center justify-center text-xl md:text-2xl font-bold transition-all duration-500 transform",
+                    "relative w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-base md:text-lg font-bold transition-all duration-500 transform",
                     step >= s.num 
                       ? `bg-zinc-900 text-white shadow-md scale-110` 
                       : "bg-gray-100 text-gray-400 scale-100"
@@ -129,7 +135,7 @@ export default function OrderForm() {
                     {step > s.num ? <span className="animate-pulse">✓</span> : <span>{s.num}</span>}
                   </div>
                   <span className={clsx(
-                    "text-xs md:text-sm mt-2 font-semibold transition-all duration-300",
+                    "text-[11px] md:text-xs mt-1.5 font-semibold transition-all duration-300",
                     step >= s.num ? "text-gray-900" : "text-gray-400"
                   )}>
                     {s.label}
@@ -148,12 +154,15 @@ export default function OrderForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Main Content Area */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4">
             {step === 1 && (
               <OrderCustomerStep 
                 customers={customers as any[]} 
+                search={customerSearch}
+                onSearchChange={setCustomerSearch}
+                isLoading={isLoadingCustomers}
                 selectedCustomer={selectedCustomer}
                 setSelectedCustomer={setSelectedCustomer as any}
                 onNext={() => setStep(2)}
@@ -163,7 +172,7 @@ export default function OrderForm() {
             {step === 2 && (
               <OrderProductsStep
                 products={products as any[]}
-                categories={categories.map((c: any) => c.name)}
+                categories={categories as any[]}
                 addToCart={handleAddToCart}
                 cartContains={(id) => cartState.cart.some((i: any) => i.product_id === id)}
                 addingProduct={addingProduct}

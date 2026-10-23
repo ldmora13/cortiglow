@@ -7,8 +7,9 @@ export class CustomerController {
     try {
       const search = req.query.search as string;
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 100;
+      const sortBySales = req.query.sort === 'sales';
       
-      const customers = await customerService.getAllCustomers(search, limit);
+      const customers = await customerService.getAllCustomers(search, limit, sortBySales);
       res.json(customers);
     } catch (error: any) {
       console.error('Error fetching customers:', error);

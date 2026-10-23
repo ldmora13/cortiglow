@@ -8,6 +8,7 @@ export const useOrders = (filters?: any) => {
   const ordersQuery = useQuery<Order[]>({
     queryKey: ['orders', filters],
     queryFn: () => OrderService.getOrders(filters),
+    placeholderData: (previousData) => previousData,
   });
 
   const getOrderQuery = (id: string) => useQuery<Order>({
@@ -49,6 +50,7 @@ export const useOrders = (filters?: any) => {
   return {
     orders: ordersQuery.data || [],
     isLoadingOrders: ordersQuery.isLoading,
+    isFetchingOrders: ordersQuery.isFetching,
     isErrorOrders: ordersQuery.isError,
     refetchOrders: ordersQuery.refetch,
     

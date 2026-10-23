@@ -147,7 +147,7 @@ model Order {
   order_number          String      @unique // "ORD-2024-0001"
   customer_id           String
   customer              Customer    @relation(fields: [customer_id], references: [id], onDelete: Restrict)
-  status                String      @default("pending") // 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled'
+  status                String      @default("pending") // 'pending' | 'completed' | 'cancelled'
   subtotal              Decimal     @db.Decimal(15, 0)
   discount              Decimal     @default(0) @db.Decimal(15, 0)
   tax                   Decimal     @default(0) @db.Decimal(15, 0) // IVA 19%

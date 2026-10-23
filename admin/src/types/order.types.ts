@@ -1,7 +1,7 @@
 import type { Customer } from './customer.types';
 import type { Product } from './product.types';
 
-export type OrderStatus = 'pending' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled';
+export type OrderStatus = 'pending' | 'completed' | 'cancelled';
 
 export interface OrderItem {
   id?: string;

@@ -269,16 +269,6 @@ export default function Layout() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 </button>
-                <div>
-                  <h2 className="text-lg sm:text-xl font-bold text-zinc-900">
-                    {location.pathname === '/' ? 'Dashboard' : (
-                      navItems.find((i) => location.pathname.startsWith(i.path))?.name || 'Admin'
-                    )}
-                  </h2>
-                  <p className="text-xs text-zinc-500 mt-0.5 hidden sm:block font-medium">
-                    Gestiona el negocio
-                  </p>
-                </div>
               </div>
 
               {/* Notifications + Profile */}

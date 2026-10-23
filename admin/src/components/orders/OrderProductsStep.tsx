@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import type { Product } from '../../types/product.types';
+import type { Category } from '../../types/product.types';
 import { formatCOP } from '../../utils/currency';
 
 interface OrderProductsStepProps {
   products: Product[];
-  categories: string[];
+  categories: Category[];
   addToCart: (product: Product) => void;
   cartContains: (productId: string) => boolean;
   addingProduct: string | null;
@@ -27,23 +28,54 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
 }) => {
   const [searchProduct, setSearchProduct] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedParentCategory, setSelectedParentCategory] = useState<string | null>(null);
 
-  const filteredProducts = products.filter(p => {
+  const categoriesByParent = categories.reduce((map, category) => {
+    const parentId = category.parent_id || null;
+    const siblings = map.get(parentId) || [];
+    map.set(parentId, [...siblings, category]);
+    return map;
+  }, new Map<string | null, Category[]>());
+  const rootCategories = categoriesByParent.get(null) || [];
+  const visibleSubcategories = selectedParentCategory
+    ? categoriesByParent.get(selectedParentCategory) || []
+    : [];
+
+  const categoryIds = selectedCategory === 'all'
+    ? null
+    : (() => {
+        const collect = (categoryId: string): string[] => [
+          categoryId,
+          ...(categoriesByParent.get(categoryId) || []).flatMap(child => collect(child.id))
+        ];
+        return new Set(collect(selectedCategory));
+      })();
+
+  const availableProducts = products.filter(product =>
+    product.is_active && (product.inventory?.quantity || 0) > 0
+  );
+
+  const filteredProducts = availableProducts.filter(p => {
     const matchesSearch = p.name.toLowerCase().includes(searchProduct.toLowerCase());
-    const matchesCategory = selectedCategory === 'all' || p.category?.name === selectedCategory;
+    const matchesCategory = categoryIds === null || Boolean(p.category_id && categoryIds.has(p.category_id));
     return matchesSearch && matchesCategory;
   });
+  const displayedProducts = selectedCategory === 'all' && !searchProduct.trim()
+    ? [...filteredProducts]
+      .sort((a, b) => (b.sales_count || 0) - (a.sales_count || 0))
+      .slice(0, 5)
+    : filteredProducts;
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-white border-b border-zinc-200 p-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Agregar Productos</h2>
-          <p className="text-zinc-600">Busca y agrega productos a la orden</p>
+    <div className="space-y-4">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-white border-b border-zinc-200 p-3">
+        <h2 className="text-lg font-bold text-gray-900 mb-0.5">Agregar Productos</h2>
+          <p className="text-sm text-zinc-600">Busca y agrega productos a la orden</p>
         </div>
 
-        <div className="p-6 space-y-4">
-          {products.length > 0 && products.every(p => !p.inventory || p.inventory.quantity === 0) && (
+      <div className="p-3 space-y-3">
+        {products.length > 0 && availableProducts.length === 0 && (
             <div className="bg-amber-50 border border-zinc-200 rounded-xl p-4 flex items-start gap-3">
               <span className="text-2xl">⚠️</span>
               <div className="flex-1">
@@ -69,29 +101,105 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
               placeholder="Buscar productos..."
               value={searchProduct}
               onChange={(e) => setSearchProduct(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all text-sm"
             />
 
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {categories.map(cat => (
+            <div className="rounded-lg border border-zinc-200 bg-zinc-50/70 p-2 space-y-2">
+              <div className="flex items-center justify-between gap-3 px-1">
+                <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+                  Filtrar por categoría
+                </p>
+                {selectedCategory !== 'all' && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory('all');
+                      setSelectedParentCategory(null);
+                    }}
+                    className="text-xs font-semibold text-zinc-700 hover:text-zinc-950"
+                  >
+                    Limpiar
+                  </button>
+                )}
+              </div>
+
+              <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedCategory('all');
+                  setSelectedParentCategory(null);
+                }}
+                className={clsx(
+                  "shrink-0 px-3 py-2 rounded-lg font-medium text-sm transition-all",
+                  selectedCategory === 'all' ? "bg-zinc-900 text-white shadow-sm" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                )}
+              >
+                Todos
+              </button>
+              {rootCategories.map(category => (
                 <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
+                  type="button"
+                  key={category.id}
+                  onClick={() => {
+                    setSelectedCategory(category.id);
+                    setSelectedParentCategory(
+                      (categoriesByParent.get(category.id) || []).length > 0 ? category.id : null
+                    );
+                  }}
                   className={clsx(
-                    "px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all",
-                    selectedCategory === cat
+                    "shrink-0 max-w-[190px] px-3 py-2 rounded-lg font-medium text-sm transition-all truncate",
+                    (selectedCategory === category.id || selectedParentCategory === category.id)
                       ? "bg-zinc-900 text-white shadow-sm"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   )}
                 >
-                  {cat === 'all' ? 'Todos' : cat}
+                  {category.name}
                 </button>
               ))}
+              </div>
+
+              {selectedParentCategory && visibleSubcategories.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 border-t border-zinc-200 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedCategory(selectedParentCategory)}
+                    className={clsx(
+                      "px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
+                      selectedCategory === selectedParentCategory
+                        ? "bg-zinc-800 text-white"
+                        : "bg-white text-zinc-600 hover:bg-zinc-200"
+                    )}
+                  >
+                    Todas en {rootCategories.find(category => category.id === selectedParentCategory)?.name}
+                  </button>
+                  {visibleSubcategories.map(category => (
+                    <button
+                      type="button"
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={clsx(
+                        "px-2.5 py-1.5 rounded-md text-xs font-medium transition-all",
+                        selectedCategory === category.id
+                          ? "bg-zinc-800 text-white"
+                          : "bg-white text-zinc-600 hover:bg-zinc-200"
+                      )}
+                    >
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-96 overflow-y-auto">
-            {filteredProducts.length === 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto">
+            {selectedCategory === 'all' && !searchProduct.trim() && displayedProducts.length > 0 && (
+              <p className="sm:col-span-2 text-xs text-zinc-500">
+                Productos más vendidos
+              </p>
+            )}
+            {displayedProducts.length === 0 ? (
               <div className="col-span-2 text-center py-12">
                 <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg></div>
                 <p className="text-gray-500 mb-4">
@@ -110,8 +218,8 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                 )}
               </div>
             ) : (
-              filteredProducts.map(product => {
-                const hasStock = product.inventory && product.inventory.quantity > 0;
+              displayedProducts.map(product => {
+                const hasStock = Boolean(product.inventory && product.inventory.quantity > 0);
                 const stockQty = product.inventory?.quantity || 0;
                 const isAdding = addingProduct === product.id;
                 const inCart = cartContains(product.id);
@@ -122,7 +230,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                     onClick={() => addToCart(product)}
                     disabled={!hasStock}
                     className={clsx(
-                      "text-left p-4 rounded-xl border-2 transition-all duration-300 transform",
+                      "text-left p-3 rounded-lg border transition-all duration-200 transform",
                       hasStock
                         ? "border-gray-200 hover:border-zinc-200 hover:shadow-md hover:-translate-y-1 group cursor-pointer"
                         : "border-red-200 bg-red-50 opacity-60 cursor-not-allowed",
@@ -136,7 +244,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                           <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="w-16 h-16 object-cover rounded-lg"
+                            className="w-12 h-12 object-cover rounded-md"
                           />
                           {!hasStock && (
                             <div className="absolute inset-0 bg-zinc-900 bg-opacity-40 rounded-lg flex items-center justify-center">
@@ -147,20 +255,20 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                       )}
                       <div className="flex-1 min-w-0">
                         <p className={clsx(
-                          "font-semibold truncate transition-colors",
+                          "text-sm font-semibold truncate transition-colors",
                           hasStock ? "text-gray-900 group-hover:text-zinc-600" : "text-gray-500"
                         )}>
                           {product.name}
                         </p>
                         <p className={clsx(
-                          "text-lg font-bold",
+                          "text-base font-bold",
                           hasStock ? "text-zinc-600" : "text-gray-400"
                         )}>
                           {formatCOP(product.price)}
                         </p>
                         <div className="flex items-center gap-2">
                           {hasStock ? (
-                            <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full font-medium">
+                            <span className="text-[11px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded-full font-medium">
                               ✓ Stock: {stockQty}
                             </span>
                           ) : (
@@ -172,7 +280,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                       </div>
                       <div className="flex items-center">
                         {hasStock ? (
-                          <div className="w-8 h-8 rounded-full bg-zinc-100 group-hover:bg-zinc-900 text-zinc-500 group-hover:text-white flex items-center justify-center transition-all">
+                          <div className="w-7 h-7 rounded-full bg-zinc-100 group-hover:bg-zinc-900 text-zinc-500 group-hover:text-white flex items-center justify-center transition-all">
                             <span className="text-zinc-600 group-hover:text-white font-bold">+</span>
                           </div>
                         ) : (
@@ -193,7 +301,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onBack}
-          className="flex-1 py-5 border-2 border-gray-300 text-gray-700 rounded-2xl font-bold hover:bg-gray-100 hover:border-gray-400 transition-all shadow-md hover:shadow-sm transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+          className="flex-1 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all flex items-center justify-center gap-2 text-sm"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
@@ -203,7 +311,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
         <button
           onClick={onNext}
           disabled={isNextDisabled}
-          className="flex-1 py-5 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-2xl font-bold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gradient-to-r hover:from-blue-700 hover:to-zinc-700 shadow-md hover:shadow-md transform hover:-translate-y-0.5 flex items-center justify-center gap-2"
+          className="flex-1 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
         >
           <span>Continuar a Pago</span>
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -99,7 +99,7 @@ export class DashboardService {
   }
 
   async getOrdersByStatus(filters: any) {
-    const statuses = ['pending', 'confirmed', 'in_progress', 'completed', 'cancelled'];
+    const statuses = ['pending', 'completed', 'cancelled'];
     return await dashboardRepository.getOrdersByStatusCounts(filters, statuses);
   }
 

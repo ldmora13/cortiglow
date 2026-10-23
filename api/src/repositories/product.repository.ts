@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 
 export class ProductRepository {
   async findAll(includeInactive = false) {
-    return prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: includeInactive ? undefined : { is_active: true },
       orderBy: { created_at: 'desc' },
       include: { 
@@ -12,6 +12,17 @@ export class ProductRepository {
         provider: true
       }
     });
+    const sales = await prisma.orderItem.groupBy({
+      by: ['product_id'],
+      where: { order: { status: 'completed' } },
+      _sum: { quantity: true }
+    });
+    const salesByProduct = new Map(sales.map(sale => [sale.product_id, sale._sum.quantity || 0]));
+
+    return products.map(product => ({
+      ...product,
+      sales_count: salesByProduct.get(product.id) || 0
+    }));
   }
 
   async findById(id: string) {

@@ -9,8 +9,6 @@ import type { OrderStatus } from '../types/order.types';
 
 const statusConfig: Record<string, any> = {
   pending: { icon: '', color: 'yellow', label: 'Pendiente', bgClass: 'bg-yellow-50', borderClass: 'border-zinc-300' },
-  confirmed: { icon: '✓', color: 'blue', label: 'Confirmada', bgClass: 'bg-gray-50', borderClass: 'border-zinc-300' },
-  in_progress: { icon: '', color: 'blue', label: 'En Progreso', bgClass: 'bg-white', borderClass: 'border-zinc-300' },
   completed: { icon: '', color: 'green', label: 'Completada', bgClass: 'bg-green-50', borderClass: 'border-zinc-300' },
   cancelled: { icon: '', color: 'red', label: 'Cancelada', bgClass: 'bg-red-50', borderClass: 'border-red-300' }
 };
@@ -31,8 +29,6 @@ export default function OrderDetail() {
 
   const handleChangeStatus = async (newStatus: OrderStatus | 'cancelled') => {
     const confirmMessages: Record<string, string> = {
-      confirmed: '¿Confirmar esta orden?',
-      in_progress: '¿Marcar como en progreso?',
       completed: '¿Marcar como completada? Esta acción indica que la orden fue entregada.',
       cancelled: '¿Cancelar esta orden? El inventario será restaurado.',
     };
@@ -125,18 +121,9 @@ export default function OrderDetail() {
 
             <div className="flex flex-wrap gap-2">
               {order.status === 'pending' && (
-                <button onClick={() => handleChangeStatus('confirmed')} disabled={isUpdating} className="px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 font-medium disabled:opacity-50">✓ Confirmar</button>
-              )}
-              {order.status === 'confirmed' && (
-                <>
-                  <button onClick={() => handleChangeStatus('in_progress')} disabled={isUpdating} className="px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-800 font-medium disabled:opacity-50">En progreso</button>
-                  <button onClick={() => handleChangeStatus('completed')} disabled={isUpdating} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50">Completar</button>
-                </>
-              )}
-              {order.status === 'in_progress' && (
                 <button onClick={() => handleChangeStatus('completed')} disabled={isUpdating} className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium disabled:opacity-50">Completar</button>
               )}
-              {order.status !== 'cancelled' && order.status !== 'completed' && (
+              {order.status === 'completed' && (
                 <button onClick={() => handleChangeStatus('cancelled')} disabled={isUpdating} className="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-medium disabled:opacity-50">Cancelar</button>
               )}
             </div>

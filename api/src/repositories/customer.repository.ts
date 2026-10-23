@@ -2,7 +2,7 @@ import prisma from '../prisma';
 import { Prisma } from '@prisma/client';
 
 export class CustomerRepository {
-  async findAll(search?: string, limit: number = 100) {
+  async findAll(search?: string, limit: number = 100, sortBySales = false) {
     const where: any = { is_active: true };
 
     if (search) {
@@ -17,6 +17,7 @@ export class CustomerRepository {
       where,
       include: {
         orders: {
+          where: sortBySales ? { status: 'completed' } : undefined,
           select: {
             id: true,
             order_number: true,
@@ -25,11 +26,21 @@ export class CustomerRepository {
             created_at: true
           },
           orderBy: { created_at: 'desc' },
-          take: 5
+          take: sortBySales ? undefined : 5
         }
       },
       orderBy: { created_at: 'desc' },
-      take: limit
+      take: sortBySales ? undefined : limit
+    }).then(customers => {
+      if (!sortBySales) return customers;
+
+      return customers
+        .map(customer => ({
+          ...customer,
+          sales_total: customer.orders.reduce((sum, order) => sum + Number(order.total), 0)
+        }))
+        .sort((a, b) => b.sales_total - a.sales_total)
+        .slice(0, limit);
     });
   }
 
