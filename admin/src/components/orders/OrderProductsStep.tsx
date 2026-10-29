@@ -69,12 +69,11 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
   return (
     <div className="space-y-4">
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="bg-white border-b border-zinc-200 p-3">
-        <h2 className="text-lg font-bold text-gray-900 mb-0.5">Agregar Productos</h2>
-          <p className="text-sm text-zinc-600">Busca y agrega productos a la orden</p>
-        </div>
+      <div className="bg-white border-b border-zinc-200 px-3 py-2">
+        <h2 className="text-sm font-bold text-gray-900">Agregar Productos</h2>
+      </div>
 
-      <div className="p-3 space-y-3">
+      <div className="p-2.5 space-y-2.5">
         {products.length > 0 && availableProducts.length === 0 && (
             <div className="bg-amber-50 border border-zinc-200 rounded-xl p-4 flex items-start gap-3">
               <span className="text-2xl">⚠️</span>
@@ -193,7 +192,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-72 overflow-y-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-[36vh] overflow-y-auto">
             {selectedCategory === 'all' && !searchProduct.trim() && displayedProducts.length > 0 && (
               <p className="sm:col-span-2 text-xs text-zinc-500">
                 Productos más vendidos
@@ -230,7 +229,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                     onClick={() => addToCart(product)}
                     disabled={!hasStock}
                     className={clsx(
-                      "text-left p-3 rounded-lg border transition-all duration-200 transform",
+                      "text-left p-2.5 rounded-lg border transition-all duration-200 transform",
                       hasStock
                         ? "border-gray-200 hover:border-zinc-200 hover:shadow-md hover:-translate-y-1 group cursor-pointer"
                         : "border-red-200 bg-red-50 opacity-60 cursor-not-allowed",
@@ -244,7 +243,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                           <img
                             src={product.images[0]}
                             alt={product.name}
-                            className="w-12 h-12 object-cover rounded-md"
+                            className="w-10 h-10 object-cover rounded-md"
                           />
                           {!hasStock && (
                             <div className="absolute inset-0 bg-zinc-900 bg-opacity-40 rounded-lg flex items-center justify-center">
@@ -301,7 +300,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
       <div className="flex gap-3">
         <button
           onClick={onBack}
-          className="flex-1 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all flex items-center justify-center gap-2 text-sm"
+          className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all flex items-center justify-center gap-2 text-sm"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
@@ -311,7 +310,7 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
         <button
           onClick={onNext}
           disabled={isNextDisabled}
-          className="flex-1 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
+          className="flex-1 py-2 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm"
         >
           <span>Continuar a Pago</span>
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -57,11 +57,6 @@ export function formatPaymentMethod(method: string): string {
   return methodMap[method] || method;
 }
 
-// Calcular IVA (19% por defecto en Colombia)
-export function calculateTax(amount: number, taxRate: number = 0.19): number {
-  return Math.round(amount * taxRate);
-}
-
 // Validar stock disponible
 export function validateStock(
   inventory: { quantity: number },

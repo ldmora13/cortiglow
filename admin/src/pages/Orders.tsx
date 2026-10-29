@@ -174,10 +174,10 @@ export default function Orders() {
         </div>
         <Link
           to="/orders/new"
-          className="inline-flex items-center justify-center px-4 py-2.5 min-h-[44px] bg-zinc-900 text-white rounded-xl text-sm font-bold hover:bg-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2 transition-colors"
+          className="group relative inline-flex items-center justify-center px-5 py-2.5 min-h-[44px] rounded-xl text-sm font-bold text-amber-950 bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 shadow-lg shadow-amber-500/30 ring-1 ring-amber-600/30 hover:from-amber-200 hover:via-amber-300 hover:to-amber-400 hover:shadow-amber-500/50 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-700 focus-visible:ring-offset-2 transition-all duration-200"
         >
           <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M12 4v16m8-8H4" />
           </svg>
           Nueva Venta
         </Link>
@@ -305,7 +305,7 @@ export default function Orders() {
           <div className="w-12 h-12 rounded-full bg-zinc-100 text-zinc-400 flex items-center justify-center mx-auto mb-4"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg></div>
           <h3 className="text-xl font-bold text-gray-900 mb-2">No hay órdenes</h3>
           <p className="text-zinc-600 mb-6">Crea la primera venta para comenzar</p>
-          <Link to="/orders/new" className="inline-flex items-center px-6 py-3 bg-zinc-900 text-white rounded-xl font-semibold">
+          <Link to="/orders/new" className="inline-flex items-center px-6 py-3 rounded-xl font-bold text-amber-950 bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 shadow-lg shadow-amber-500/30 ring-1 ring-amber-600/30 hover:from-amber-200 hover:to-amber-400 transition-all">
             Crear Primera Venta
           </Link>
         </div>

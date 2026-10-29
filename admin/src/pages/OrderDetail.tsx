@@ -203,7 +203,7 @@ export default function OrderDetail() {
             <div className="space-y-2">
               <div className="flex justify-between text-gray-700"><span>Subtotal:</span><span className="font-semibold">{formatCOP(order.subtotal)}</span></div>
               {order.discount > 0 && <div className="flex justify-between text-zinc-600"><span>Descuento:</span><span className="font-semibold">-{formatCOP(order.discount)}</span></div>}
-              <div className="flex justify-between text-gray-700"><span>IVA (19%):</span><span className="font-semibold">{formatCOP(order.tax)}</span></div>
+              {Number(order.tax) > 0 && <div className="flex justify-between text-gray-700"><span>IVA:</span><span className="font-semibold">{formatCOP(order.tax)}</span></div>}
               {order.delivery_cost > 0 && <div className="flex justify-between text-gray-700"><span>Envío:</span><span className="font-semibold">{formatCOP(order.delivery_cost)}</span></div>}
               <div className="border-t-2 border-zinc-300 pt-2 mt-2">
                 <div className="flex justify-between items-center"><span className="text-lg font-bold text-gray-900">TOTAL:</span><span className="text-3xl font-bold text-amber-500">{formatCOP(order.total)}</span></div>

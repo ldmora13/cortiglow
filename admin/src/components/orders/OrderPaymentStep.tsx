@@ -35,12 +35,11 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
 }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="bg-white border-b border-zinc-200 p-3">
-        <h2 className="text-lg font-bold text-gray-900 mb-0.5">Confirmar Venta</h2>
-        <p className="text-sm text-zinc-600">Configura los detalles finales de la venta</p>
+      <div className="bg-white border-b border-zinc-200 px-3 py-2">
+        <h2 className="text-sm font-bold text-gray-900">Confirmar Venta</h2>
       </div>
 
-      <div className="p-3 space-y-3">
+      <div className="p-3 space-y-2.5">
         <div>
           <label className="block text-xs font-semibold text-gray-700 mb-2">
             Método de Pago
@@ -61,20 +60,12 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
                 role="radio"
                 aria-checked={paymentMethod === method.id}
                 className={clsx(
-                  "relative p-2 rounded-lg border font-semibold transition-all transform hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2",
+                  "relative py-2 px-3 rounded-lg border font-semibold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-2",
                   paymentMethod === method.id
                     ? "border-zinc-900 bg-zinc-900 text-white shadow-md"
                     : "border-gray-200 hover:border-zinc-400 bg-white text-gray-700 hover:shadow-sm"
                 )}
               >
-                {paymentMethod === method.id && (
-                  <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-white text-zinc-900" aria-hidden="true">
-                    <svg className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.704 5.29a1 1 0 010 1.42l-7.25 7.25a1 1 0 01-1.415 0l-3.25-3.25a1 1 0 011.415-1.42l2.543 2.544 6.543-6.544a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </span>
-                )}
-                <div className="text-base mb-0.5">{method.icon}</div>
                 <div className="text-xs">{method.label}</div>
               </button>
             ))}
@@ -85,19 +76,19 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
           <label className="block text-xs font-semibold text-gray-700 mb-2">
             🎁 Descuento
           </label>
-          <div className="flex gap-2 mb-3">
+          <div className="flex gap-2 mb-2">
             {[5, 10, 15, 20].map(perc => (
               <button
                 key={perc}
                 onClick={() => applyQuickDiscount(perc)}
-                className="px-4 py-2 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-all font-medium text-sm"
+                className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-all font-medium text-sm"
               >
                 {perc}%
               </button>
             ))}
             <button
               onClick={() => setDiscount(0)}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium text-sm"
+              className="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all font-medium text-sm"
             >
               Sin descuento
             </button>
@@ -106,12 +97,12 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
             type="number"
             value={discount}
             onChange={(e) => setDiscount(Math.max(0, Number(e.target.value)))}
-            className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
             placeholder="Ingresa monto manual"
             min="0"
           />
           {discount > 0 && (
-            <p className="text-sm text-zinc-600 mt-2">
+            <p className="text-xs text-zinc-600 mt-1.5">
               Descuento aplicado: {formatCOP(discount)} ({((discount/subtotal)*100).toFixed(1)}%)
             </p>
           )}
@@ -125,7 +116,7 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
             type="number"
             value={deliveryCost}
             onChange={(e) => setDeliveryCost(Math.max(0, Number(e.target.value)))}
-            className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all"
             placeholder="0 = Recoge en tienda"
             min="0"
           />
@@ -138,16 +129,16 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all resize-none"
+            rows={2}
+            className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-zinc-900 focus:border-transparent transition-all resize-none"
             placeholder="Agrega notas sobre esta venta..."
           />
         </div>
 
-        <div className="flex gap-3 pt-4">
+        <div className="flex gap-3 pt-2">
           <button
             onClick={onBack}
-            className="flex-1 py-2.5 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all flex items-center justify-center gap-2 text-sm"
+            className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 hover:border-gray-400 transition-all flex items-center justify-center gap-2 text-sm"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M11 17l-5-5m0 0l5-5m-5 5h12" />
@@ -157,7 +148,7 @@ export const OrderPaymentStep: React.FC<OrderPaymentStepProps> = ({
           <button
             onClick={onSubmit}
             disabled={isLoading}
-            className="flex-1 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 py-2 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>

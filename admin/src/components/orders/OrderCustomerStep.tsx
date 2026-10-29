@@ -27,12 +27,11 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
   return (
     <>
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-        <div className="bg-white border border-zinc-200 p-3 border-b">
-          <h2 className="text-lg font-bold text-gray-900 mb-0.5">Seleccionar Cliente</h2>
-          <p className="text-sm text-zinc-600">Busca un cliente existente o crea uno nuevo</p>
+        <div className="bg-white border-b border-zinc-200 px-3 py-2">
+          <h2 className="text-sm font-bold text-gray-900">Seleccionar Cliente</h2>
         </div>
 
-        <div className="p-4 space-y-3">
+        <div className="p-3 space-y-2.5">
           <div className="flex gap-2">
             <div className="flex-1 relative">
               <input
@@ -51,7 +50,7 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
             </button>
           </div>
 
-          <div className="max-h-80 overflow-y-auto space-y-2">
+          <div className="max-h-[45vh] overflow-y-auto space-y-2">
             {isLoading ? (
               <div className="text-center py-8 text-sm text-zinc-500">Buscando clientes...</div>
             ) : customers.length === 0 ? (
@@ -74,7 +73,7 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
                     onNext();
                   }}
                   className={clsx(
-                    "w-full text-left p-3 rounded-lg border-2 transition-all",
+                    "w-full text-left p-2.5 rounded-lg border-2 transition-all",
                     selectedCustomer?.id === customer.id
                       ? "border-zinc-300 bg-gray-50"
                       : "border-gray-200 hover:border-zinc-300 hover:bg-gray-50"
@@ -104,7 +103,7 @@ export const OrderCustomerStep: React.FC<OrderCustomerStepProps> = ({
           <button
             onClick={onNext}
             disabled={!selectedCustomer}
-            className="w-full py-2.5 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-2 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm transition-all rounded-lg font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <span>Continuar a Productos</span>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

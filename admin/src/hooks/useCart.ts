@@ -86,9 +86,7 @@ export const useCart = () => {
   // Calculations
   const calculations = useMemo(() => {
     const subtotal = cart.reduce((sum, item) => sum + (item.quantity * item.unit_price), 0);
-    const taxRate = 0.19; // 19% IVA
-    const taxableAmount = subtotal - discount;
-    const tax = taxableAmount > 0 ? taxableAmount * taxRate : 0;
+    const tax = 0; // IVA deshabilitado por ahora
     const total = subtotal - discount + tax + deliveryCost;
 
     return { subtotal, tax, total };
