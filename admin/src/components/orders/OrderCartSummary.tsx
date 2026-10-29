@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatCOP } from '../../utils/currency';
 import type { CartItem } from '../../types/order.types';
+import { Tooltip } from '../Tooltip';
 
 interface OrderCartSummaryProps {
   cart: CartItem[];
@@ -58,7 +59,9 @@ export const OrderCartSummary: React.FC<OrderCartSummaryProps> = ({
                 )}
                 <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
                   <div>
-                    <h4 className="font-bold text-gray-900 truncate text-sm">{item.name}</h4>
+                    <Tooltip label={item.name}>
+                      <h4 className="font-bold text-gray-900 truncate text-sm">{item.name}</h4>
+                    </Tooltip>
                     <p className="text-xs font-semibold text-zinc-500 mt-0.5">{formatCOP(item.unit_price)}</p>
                   </div>
                   <div className="flex items-center justify-between mt-2">

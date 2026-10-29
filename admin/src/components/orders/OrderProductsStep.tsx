@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import type { Product } from '../../types/product.types';
 import type { Category } from '../../types/product.types';
 import { formatCOP } from '../../utils/currency';
+import { Tooltip } from '../Tooltip';
 
 interface OrderProductsStepProps {
   products: Product[];
@@ -253,12 +254,14 @@ export const OrderProductsStep: React.FC<OrderProductsStepProps> = ({
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
-                        <p className={clsx(
-                          "text-sm font-semibold truncate transition-colors",
-                          hasStock ? "text-gray-900 group-hover:text-zinc-600" : "text-gray-500"
-                        )}>
-                          {product.name}
-                        </p>
+                        <Tooltip label={product.name}>
+                          <p className={clsx(
+                            "text-sm font-semibold truncate transition-colors",
+                            hasStock ? "text-gray-900 group-hover:text-zinc-600" : "text-gray-500"
+                          )}>
+                            {product.name}
+                          </p>
+                        </Tooltip>
                         <p className={clsx(
                           "text-base font-bold",
                           hasStock ? "text-zinc-600" : "text-gray-400"
